@@ -11,74 +11,72 @@ import pandas as pd
 import datetime as dt
 import calendar
 
-YEAR_FREQ = ['YEAR','ANNUAL','ANNUALLY','A']
+YEAR_FREQ = ['YEAR','ANNUAL','ANNUALLY','A','Y']
 MONTH_FREQ = ['M','MONTHLY','MONTH']
 QUARTER_FREQ = ['Q','QUARTER','QUARTERLY']
 WEEK_FREQ = ['W','WEEK','WEEKLY']
+BUSINESS_WEEK_FREQ = ['BW','BUSINESS-WEEK','BUSINESS-WEEKLY']
 DAY_FREQ = ['D','DAY','DAILY']
 
 
+def most_recent_period_end(date, period):
+    if isinstance(date, dt.datetime):
+        date = date.date()
+    if period.upper() in MONTH_FREQ:
+        temp = date + dt.timedelta(days=1)
+        result = dt.date(temp.year, temp.month, 1) - dt.timedelta(days=1)
+    elif period.upper() in QUARTER_FREQ:
+        temp = date + dt.timedelta(days=1)
+        result = (temp - pd.offsets.QuarterEnd()).date()
+    elif  period.upper() in WEEK_FREQ:
+        result = date - dt.timedelta(days = date.weekday()+1) if date.weekday()<6 else date
+    elif  period.upper() in YEAR_FREQ:
+        temp = date + dt.timedelta(days=1)
+        result = dt.date(temp.year, 1, 1) - dt.timedelta(days=1)
+    return result
+    
+def period_bound(date, period, bound_type='last', offset=0):
+    if isinstance(date, dt.datetime):
+        date = date.date()
+    if bound_type.upper() in ['LAST','END']:
+        if period.upper() in MONTH_FREQ:
+            result = dt.date(date.year, date.month, calendar.monthrange(date.year, date.month)[1])
+        elif period.upper() in QUARTER_FREQ:
+            result = (date - dt.timedelta(days=1) + pd.offsets.QuarterEnd()).date()
+        elif  period.upper() in WEEK_FREQ:
+            result = date + dt.timedelta(days = 6 - date.weekday())
+        elif  period.upper() in BUSINESS_WEEK_FREQ:
+            result = date + dt.timedelta(days = 6 - date.weekday())
+        elif  period.upper() in YEAR_FREQ:
+            result = dt.date(date.year, 12, 31)
+    if bound_type.upper() in ['FIRST','START']:
+        if period.upper() in MONTH_FREQ:
+            result = dt.date(date.year, date.month, 1)
+        elif period.upper() in QUARTER_FREQ:
+            result = dt.date(date.year, 3 * ((date.month - 1) // 3) + 1, 1)
+        elif  period.upper() in WEEK_FREQ:
+            result = date - dt.timedelta(days = date.weekday())
+        elif  period.upper() in BUSINESS_WEEK_FREQ:
+            result = date - dt.timedelta(days = date.weekday())
+        elif  period.upper() in YEAR_FREQ:
+            result = dt.date(date.year, 1, 1)
+    return result + dt.timedelta(days=offset)
 
-def month_end(date, direction='next'):
-    if isinstance(date, dt.datetime):
-        date = date.date()
-    if direction.upper() in ['NEXT','N']:
-        return dt.date(date.year, date.month, calendar.monthrange(date.year, date.month)[1])
-    elif direction.upper() in ['PREVIOUS','P']:
-        return dt.date(date.year, date.month, 1) - dt.timedelta(days=1)
-    else:
-        raise TypeError('Unrecognized direction type: {}'.format(direction))
-    
-
-def quarter_end(date, direction='next'):
-    if isinstance(date, dt.datetime):
-        date = date.date()
-    dates = pd.date_range(start=date-dt.timedelta(days=100), end=date+dt.timedelta(days=100), freq='Q').to_series().apply(lambda x: x.date())
-    if direction.upper() in ['NEXT','N']:
-        return dates[dates>=date].min()
-    elif direction.upper() in ['PREVIOUS','P']:
-        return dates[dates<date].max()
-    else:
-        raise TypeError('Unrecognized direction type')
-    
-def week_end(date, direction='next'):
-    if isinstance(date, dt.datetime):
-        date = date.date()
-    dates = pd.date_range(start=date-dt.timedelta(days=15), end=date+dt.timedelta(days=15), freq='W').to_series().apply(lambda x: x.date())
-    if direction.upper() in ['NEXT','N']:
-        return dates[dates>=date].min()
-    elif direction.upper() in ['PREVIOUS','P']:
-        return dates[dates<date].max()
-    else:
-        raise TypeError('Unrecognized direction type')
-
-def year_end(date, direction='next'):
-    if isinstance(date, dt.datetime):
-        date = date.date()
-    dates = pd.date_range(start=date-dt.timedelta(days=400), end=date+dt.timedelta(days=400), freq='Y').to_series().apply(lambda x: x.date())
-    if direction.upper() in ['NEXT','N']:
-        return dates[dates>=date].min()
-    elif direction.upper() in ['PREVIOUS','P']:
-        return dates[dates<date].max()
-    else:
-        raise TypeError('Unrecognized direction type')
-    
-    
 def change_frequency(data, freq_from, freq_to, how='last'):
     temp = data.to_frame()
     if freq_to.upper() in MONTH_FREQ:
         if freq_from.upper() in WEEK_FREQ or freq_from.upper() in DAY_FREQ:
-            temp['TimeGroup'] = pd.Series(temp.index).apply(lambda x: month_end(x)).values
+            temp['TimeGroup'] = pd.Series(temp.index).apply(lambda x: period_bound(x,'M')).values
         else:
             raise TypeError('Cannot convert {} to monthly freqeuncy'.format(freq_from))
     elif freq_to.upper() in WEEK_FREQ:
         if freq_from.upper() in DAY_FREQ:
-            temp['TimeGroup'] = pd.Series(temp.index).apply(lambda x: week_end(x)).values
+            temp['TimeGroup'] = pd.Series(temp.index).apply(lambda x: period_bound(x,'W')).values
         else:
             raise TypeError('Cannot convert {} to monthly freqeuncy'.format(freq_from))
     elif freq_to.upper() in YEAR_FREQ:
         if freq_from.upper() in WEEK_FREQ or freq_from.upper() in DAY_FREQ or freq_from.upper() in MONTH_FREQ:
-            temp['TimeGroup'] = pd.Series(temp.index).apply(lambda x: year_end(x)).values
+            temp['TimeGroup'] = pd.Series(temp.index).apply(lambda x: period_bound(x,'Y')).values
         else:
             raise TypeError('Cannot convert {} to monthly freqeuncy'.format(freq_from))
     
@@ -127,7 +125,7 @@ def calculate_change(data, how, freq):
 
 if __name__ =="__main__":
     
-    dates = pd.date_range(dt.date(2010,1,1), dt.date(2024,3,10), freq='D')
+    dates = pd.date_range(dt.date(2010,1,1), dt.date(2024,5,10), freq='D')
     data = pd.Series(index = dates, data=[np.random.rand() for i in dates], name='Test')
     
-    test1 = change_frequency(data, freq_from='Day', freq_to='month', how='median')
+    test1 = change_frequency(data, freq_from='Day', freq_to='y', how='last')
