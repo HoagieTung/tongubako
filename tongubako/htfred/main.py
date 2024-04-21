@@ -8,7 +8,7 @@ Created on Fri Apr 19 22:45:20 2024
 
 import numpy as np
 import pandas as pd
-from datetime import datetime, timezone, timedelta, date
+import datetime as dt
 import requests
 import json
 from tongubako.utils import guess_frequency
@@ -23,7 +23,7 @@ class FRED():
     def get_series_info(self, sid):
         return  fetch_data.get_series_info(sid, self.apikey, file_type='json')
     
-    def get_series_data(self, sid, freq=None, aggregate='eop', units=None, bound_type='last', realtime_start=None, realtime_end=None):
+    def get_series_data(self, sid, freq=None, aggregate='eop', units=None, bound_type='last', start_date=None, end_date=None, realtime_start=None, realtime_end=None, details=True):
         raw_data = fetch_data.get_series_observations(sid=sid, freq=freq , aggregate=aggregate, units=units, apikey=self.apikey, realtime_start=realtime_start, realtime_end=realtime_end)
         series_info = fetch_data.get_series_info(sid=sid, apikey=self.apikey, file_type='json')
         observations = process_data.process_series_observation(data=raw_data, point_in_time='last', drop_realtime=True)
@@ -34,14 +34,20 @@ class FRED():
         output['sid'], output['title'] = series_info['id'], series_info['title']
         output['units'] = raw_data['units']
         
-        observations = process_data.adjust_series_observation_bound(observations, output['freq'], bound_type)
+        observations = process_data.adjust_series_observation_bound(observations, output['freq'], bound_type).squeeze().rename(output['sid'])
+        if start_date is not None:
+            observations = observations[observations.index>=start_date]
+        if end_date is not None:
+            observations = observations[observations.index<=end_date]
+        output['observations'] = observations
         
-        output['observations'] = observations.squeeze().rename(output['sid'])
-        
-        return output
+        if details:
+            return output
+        else:
+            return observations
 
 
 if __name__ =="__main__":
     test = FRED(apikey = "75d754e2105704e2fbb857cfc31db71b")
     test1 = test.get_series_info(sid='GDP')
-    test2 = test.get_series_data(sid='PPIACO', freq='q', aggregate='eop', units='pc1', bound_type='last')
+    test2 = test.get_series_data(sid='PPIACO', freq='q', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(2021,1,1))
