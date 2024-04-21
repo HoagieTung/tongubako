@@ -62,6 +62,26 @@ def period_bound(date, period, bound_type='last', offset=0):
             result = dt.date(date.year, 1, 1)
     return result + dt.timedelta(days=offset)
 
+
+def guess_frequency(dates):
+    dates = pd.Series(dates).rename('date').to_frame()
+    dates['Year'] = dates['date'].apply(lambda x: x.strftime('%Y'))
+    check = dates.groupby('Year').count().squeeze()
+    n_obs = check.sort_values().iloc[2:].mean()
+    
+    if 10 < n_obs < 13:
+        return 'M'
+    elif 3 < n_obs < 5:
+        return 'Q'
+    elif 1 < n_obs < 3:
+        return 'SA'
+    elif 40 < n_obs < 60:
+        return 'W'
+    elif 120 < n_obs:
+        return 'D'
+    else:
+        return 'Unknown'
+
 def change_frequency(data, freq_from, freq_to, how='last'):
     temp = data.to_frame()
     if freq_to.upper() in MONTH_FREQ:
@@ -91,6 +111,18 @@ def change_frequency(data, freq_from, freq_to, how='last'):
     
     return result
 
+def align_dates(data, freq, offset=0):
+    start, end = pd.Series(data.index).min(), pd.Series(data.index).max()
+    if freq in ['W','M','Q']:
+        dates = pd.Series(pd.date_range(start-dt.timedelta(days=100), end+dt.timedelta(days=100), freq=freq)).rename('date').apply(lambda x: x.date()+dt.timedelta(days=offset))
+    if freq in ['BW']:
+        dates = pd.Series(pd.date_range(start-dt.timedelta(days=100), end+dt.timedelta(days=100), freq='W')).rename('date').apply(lambda x: x.date()+dt.timedelta(days=-2+offset))
+    dates = dates[(dates>=start) & (dates<=end)]
+    data.index.name='date'
+    data = data.reset_index()
+    temp = pd.merge(data, dates, left_on='date', right_on='date', how='outer').sort_values(by='date')
+    temp.index = temp['date']
+    return temp.drop('date', axis=1)
 
 def calculate_change(data, how, freq):
     

@@ -9,7 +9,7 @@ import pandas as pd
 import datetime as dt
 
 from tongubako.utils import timeseries
-from tongubako.utils import change_frequency, calculate_change, period_bound
+from tongubako.utils import change_frequency, calculate_change, period_bound, align_dates, guess_frequency
 
 def process_series_observation(data, point_in_time='last', drop_realtime=True):
     observations = pd.DataFrame(data['observations'])
@@ -17,6 +17,7 @@ def process_series_observation(data, point_in_time='last', drop_realtime=True):
     observations['realtime_end'] = observations['realtime_end'].apply(lambda x: dt.datetime.strptime(x, '%Y-%m-%d').date())
     observations['date'] = observations['date'].apply(lambda x: dt.datetime.strptime(x, '%Y-%m-%d').date())
     observations = observations.sort_values(by=['date','realtime_end','realtime_start'], ascending=[True, True, True])
+    observations = observations.replace('.',np.nan).dropna()
     
     if point_in_time.upper() in ['LAST']:
         observations = observations.groupby('date').last()
@@ -28,14 +29,16 @@ def process_series_observation(data, point_in_time='last', drop_realtime=True):
     
     return observations
 
-def adjust_series_observation_units(observation, info, units='index', bound_type='default'):
+def process_series_info_with_observation(info, observation):
+
+    return
+
+
+def adjust_series_observation_bound(observation, freq, bound_type='last'):
     
-    observation = observation.rename(columns={'value':info['id']})
-    
-    "Adjust bound type"
     if bound_type.upper() in ['DEFAULT']:
         pass
     else:
-        observation.index = pd.Series(observation.index).apply(lambda x: period_bound(x, info['frequency_short'], bound_type=bound_type))
+        observation.index = pd.Series(observation.index).apply(lambda x: period_bound(x, freq, bound_type=bound_type))
     
     return observation
