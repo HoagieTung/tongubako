@@ -13,7 +13,7 @@ import requests
 import json
 from tongubako.utils import guess_frequency
 
-import fetch_data, process_data
+from . import fetch_data, process_data
 
 class FRED():
     def __init__(self, apikey):

@@ -11,7 +11,7 @@ import datetime as dt
 import requests
 import json
 
-import settings
+from . import settings
 
 
 
