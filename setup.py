@@ -22,7 +22,6 @@ setup(
 		'numpy',
 		'bs4',
 		'sqlalchemy',
-		'pymsteams',
-		'kafka-python'],
+		'pymsteams'],
 	zip_safe=False
 )
