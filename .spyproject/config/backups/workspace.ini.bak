@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['C:\\Users\\Hogan\\.spyder-py3\\temp.py', 'tongubako\\htfred\\main.py', 'tongubako\\htfred\\fetch_data.py', 'tongubako\\htfred\\process_data.py', 'tongubako\\htfred\\settings.py', '..\\ht_tools\\pyfred.py', 'tongubako\\utils\\timeseries.py', 'tongubako\\utils\\__init__.py']
+recent_files = ['C:\\Users\\Hogan\\.spyder-py3\\temp.py', 'tongubako\\htfred\\main.py', 'tongubako\\htfred\\settings.py', 'test.py', 'setup.py', '..\\ht_tools\\ht_tools\\pymt5.py', 'tongubako\\htmt5\\main.py', 'tongubako\\htmt5\\settings.py', 'tongubako\\htfmp\\__init__.py']
 
 [main]
 version = 0.2.0
