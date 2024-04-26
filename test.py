@@ -8,6 +8,7 @@ Created on Wed Apr 24 20:52:40 2024
 import datetime as dt
 
 from tongubako.htfred import FRED
+from tongubako.PCA import RPPCA
 
 
 test = FRED(apikey = "75d754e2105704e2fbb857cfc31db71b")
