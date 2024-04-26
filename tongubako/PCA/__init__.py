@@ -5,4 +5,4 @@ Created on Fri Apr 26 18:33:39 2024
 @author: homoi
 """
 
-from .main import RPPCA
+from .RPPCA import RPPCA
