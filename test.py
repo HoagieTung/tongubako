@@ -9,6 +9,7 @@ import datetime as dt
 import pandas as pd
 from tongubako.htfred import FRED
 from tongubako.PCA import RPPCA
+from tongubako.data_sample import sp500_close_price
 
 
 test = FRED(apikey = "75d754e2105704e2fbb857cfc31db71b")
