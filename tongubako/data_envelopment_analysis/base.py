@@ -13,7 +13,7 @@ class DEA():
         "rows are attributes, columns are units"
         if len(X.columns)!=len(Y.columns):
             raise ValueError("Error: Number of units inconsistent")
- 
+            
         self.X = X
         self.Y = Y
         
