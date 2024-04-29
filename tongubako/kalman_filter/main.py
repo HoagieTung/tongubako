@@ -28,10 +28,10 @@ def update_one_step(x, z, P, F, H, R, Q=None, B=None, u=None):
     pNextUpdt = pNextPred - K.dot(H).dot(pNextPred)
     
     result = {
-        'xPredicted':xNextPred,
-        'PPredicted':pNextPred,
-        'xUpdated':xNextUpdt,
-        'PUpdated':pNextUpdt,
+        'xPosteriori':xNextPred,
+        'PPosteriori':pNextPred,
+        'xPriori':xNextUpdt,
+        'PPriori':pNextUpdt,
         'K':K,   
         }
     
