@@ -24,8 +24,8 @@ def update_one_step(x, z, P, F, H, R, Q=None, B=None, u=None):
     
     # Update Step
     K = P.dot(H.T).dot(np.linalg.inv(H.dot(P).dot(H.T)+R))
-    xNextUpdt = xNextPred + (K.T).dot(z-H.dot(xNextPred))
-    pNextUpdt = pNextPred - (K.T).dot(H).dot(pNextPred)
+    xNextUpdt = xNextPred + K.dot(z-H.dot(xNextPred))
+    pNextUpdt = pNextPred - K.dot(H).dot(pNextPred)
     
     result = {
         'xPredicted':xNextPred,
