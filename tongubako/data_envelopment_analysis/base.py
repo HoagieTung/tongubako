@@ -39,7 +39,8 @@ class DEA():
         elif isinstance(data, np.mat):
             data = pd.DataFrame(data)
         
-        if len(data.columns) < 2 * len(data.columns):
+        if len(data.columns) < 2 * len(data.index):
             raise ValueError("Number of units must be larger than 2x number of attributes")
     
+        return data
     
