@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['tongubako\\htfred\\main.py', 'tongubako\\htfred\\settings.py', 'test.py', 'setup.py']
+recent_files = ['test.py', 'tongubako\\htfred\\main.py', 'tongubako\\htfred\\settings.py', 'tongubako\\PCA\\RPPCA.py', 'tongubako\\kalman_filter\\main.py', 'tongubako\\data_envelopment_analysis\\__init__.py', 'tongubako\\data_envelopment_analysis\\AdditiveModel.py', 'tongubako\\data_envelopment_analysis\\CCRModel.py', 'tongubako\\data_envelopment_analysis\\base.py']
 
 [main]
 version = 0.2.0
