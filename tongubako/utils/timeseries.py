@@ -17,7 +17,7 @@ QUARTER_FREQ = ['Q','QUARTER','QUARTERLY']
 WEEK_FREQ = ['W','WEEK','WEEKLY']
 BUSINESS_WEEK_FREQ = ['BW','BUSINESS-WEEK','BUSINESS-WEEKLY']
 DAY_FREQ = ['D','DAY','DAILY']
-
+BUSINESS_DAY_FREQ = ['D','DAY','DAILY']
 
 def most_recent_period_end(date, period):
     if isinstance(date, dt.datetime):
@@ -154,10 +154,33 @@ def calculate_change(data, how, freq):
 
     return output
 
+def time_series_shift(data, freq, shift, regulate_format=True):
+
+    start, end = data.index[0], data.index[-1]
+    
+    if shift > 0:
+        extends = pd.Series(pd.date_range(start=end, periods=abs(shift)+1))
+        extends = extends[extends>end]
+    elif shift < 0:
+        extends = pd.Series(pd.date_range(end=start, periods=abs(shift)+1))
+        extends = extends[extends<start]
+    
+    if isinstance(start, pd.Timestamp) and isinstance(end, pd.Timestamp):
+        extends = extends
+    elif isinstance(start, dt.date) and isinstance(end, dt.date):
+        extends = extends.apply(lambda x: x.date())
+    elif isinstance(start, dt.datetime) and isinstance(end, dt.datetime):
+        extends = extends.apply(lambda x: dt.datetime(x.year, x.month, x.day, x.hour, x.minute, x.second))
+    
+    extends = pd.Series(index=extends, data=np.nan)
+    result = pd.concat([data, extends])
+
+    return result.sort_index().shift(shift)
 
 if __name__ =="__main__":
     
-    dates = pd.date_range(dt.date(2010,1,1), dt.date(2024,5,10), freq='D')
+    dates = pd.date_range(dt.date(2020,1,1), dt.date(2024,5,10), freq='D')
     data = pd.Series(index = dates, data=[np.random.rand() for i in dates], name='Test')
     
     test1 = change_frequency(data, freq_from='Day', freq_to='y', how='last')
+    test2 = time_series_shift(data, 'D', -5)
