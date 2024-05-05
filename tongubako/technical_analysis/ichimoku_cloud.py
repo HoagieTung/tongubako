@@ -31,7 +31,7 @@ class IchimokuCloud:
         
         return self.ichimoku_cloud
     
-    def plot(self, start=None, end=None, period=None, figure_size=(16,12)):
+    def plot(self, start=None, end=None, period=None, figure_size=(16,10)):
         plt.style.use('seaborn')
         plt.rcParams['figure.figsize'] = figure_size
         fig=plt.figure()
@@ -72,16 +72,16 @@ class IchimokuCloud:
     
     def senkou_span_a(self, tenkan_sen, kijun_sen, freq):
         senkou_span_a = ((tenkan_sen+kijun_sen)/2).rename('senkou_span_a')
-        result = ts_shift(senkou_span_a, freq, self.short_period)
+        result = ts_shift(senkou_span_a, freq, self.long_period)
         return result
     
     def senkou_span_b(self, data, freq):
         result = data.rolling(self.long_period*2).apply(lambda x: (max(x)+min(x))/2).squeeze().rename('senkou_span_b')
-        result = ts_shift(result, freq, 26)
+        result = ts_shift(result, freq, self.long_period)
         return result
     
     def chikou_span(self, data, freq):
-        result = ts_shift(data, freq, -26)
+        result = ts_shift(data, freq, -self.long_period)
         return result.rename('chikou_span')
 
 
