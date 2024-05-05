@@ -23,4 +23,4 @@ sample = sp500_close_price['AAPL US Equity']
 
 test = IchimokuCloud()
 test1 = test.fit(sample)
-test.plot(period=250)
+test.plot(period=500)
