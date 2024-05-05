@@ -17,7 +17,7 @@ QUARTER_FREQ = ['Q','QUARTER','QUARTERLY']
 WEEK_FREQ = ['W','WEEK','WEEKLY']
 BUSINESS_WEEK_FREQ = ['BW','BUSINESS-WEEK','BUSINESS-WEEKLY']
 DAY_FREQ = ['D','DAY','DAILY']
-BUSINESS_DAY_FREQ = ['D','DAY','DAILY']
+BUSINESS_DAY_FREQ = ['B','BD','BUSINESS-DAY']
 
 def most_recent_period_end(date, period):
     if isinstance(date, dt.datetime):
@@ -77,7 +77,9 @@ def guess_frequency(dates):
         return 'SA'
     elif 40 < n_obs < 60:
         return 'W'
-    elif 120 < n_obs:
+    elif 120 < n_obs < 300:
+        return 'B'
+    elif 300 < n_obs :
         return 'D'
     else:
         return 'Unknown'
@@ -154,16 +156,16 @@ def calculate_change(data, how, freq):
 
     return output
 
-def time_series_shift(data, freq, shift, regulate_format=True):
+def ts_shift(data, freq, shift, regulate_format=True):
 
     start, end = data.index[0], data.index[-1]
     
     if shift > 0:
-        extends = pd.Series(pd.date_range(start=end, periods=abs(shift)+1))
-        extends = extends[extends>end]
+        extends = pd.Series(pd.date_range(start=end, periods=abs(shift)+1, freq=freq)).apply(lambda x: pd.Timestamp(x))
+        extends = extends[extends > pd.to_datetime(end)]
     elif shift < 0:
-        extends = pd.Series(pd.date_range(end=start, periods=abs(shift)+1))
-        extends = extends[extends<start]
+        extends = pd.Series(pd.date_range(end=start, periods=abs(shift)+1, freq=freq)).apply(lambda x: pd.Timestamp(x))
+        extends = extends[extends < pd.to_datetime(start)]
     
     if isinstance(start, pd.Timestamp) and isinstance(end, pd.Timestamp):
         extends = extends
@@ -175,12 +177,12 @@ def time_series_shift(data, freq, shift, regulate_format=True):
     extends = pd.Series(index=extends, data=np.nan)
     result = pd.concat([data, extends])
 
-    return result.sort_index().shift(shift)
+    return result.sort_index().shift(shift).rename(data.squeeze().name)
 
 if __name__ =="__main__":
     
-    dates = pd.date_range(dt.date(2020,1,1), dt.date(2024,5,10), freq='D')
+    dates = pd.date_range(dt.date(2020,1,1), dt.date(2024,5,10), freq='B')
     data = pd.Series(index = dates, data=[np.random.rand() for i in dates], name='Test')
     
     test1 = change_frequency(data, freq_from='Day', freq_to='y', how='last')
-    test2 = time_series_shift(data, 'D', -5)
+    test2 = ts_shift(data, 'B', -5)
