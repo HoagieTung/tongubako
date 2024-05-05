@@ -49,14 +49,14 @@ class IchimokuCloud:
         x = ichimoku_cloud.index
         price, tenken, kijun, senkouA, senkouB, chikou = ichimoku_cloud.iloc[:,0], ichimoku_cloud['tenkan_sen'], ichimoku_cloud['kijun_sen'], ichimoku_cloud['senkou_span_a'], ichimoku_cloud['senkou_span_b'], ichimoku_cloud['chikou_span']
        
-        ax.plot(x, senkouA, label='Senkou A', color='green')
-        ax.plot(x, senkouB, label='Senkou B', color='red')
+        #ax.plot(x, senkouA, color='green')
+        #ax.plot(x, senkouB, color='red')
         ax.plot(x, price, label=price.name, color='black')
         ax.plot(x, tenken, label='Tenkan', color='blue')
         ax.plot(x, kijun, label='Kijun', color='red')
         ax.plot(x, chikou, label='Chikou', color='green')
-        ax.fill_between(x, senkouA, senkouB, where=senkouA>=senkouB, color='green', alpha=0.2)
-        ax.fill_between(x, senkouA, senkouB, where=senkouA<senkouB, color='red', alpha=0.2)
+        ax.fill_between(x, senkouA, senkouB, where=senkouA>=senkouB, color='green', label='Bullish Cloud', alpha=0.2)
+        ax.fill_between(x, senkouA, senkouB, where=senkouA<senkouB, color='red', label='Bearish Cloud', alpha=0.2)
         ax.legend()
 
         plt.show()
