@@ -34,7 +34,7 @@ class FRED():
         output['sid'], output['title'] = series_info['id'], series_info['title']
         output['units'] = raw_data['units']
         
-        observations = process_data.adjust_series_observation_bound(observations, output['freq'], bound_type).squeeze().rename(output['sid'])
+        observations = process_data.adjust_series_observation_bound(observations, output['freq'], bound_type).squeeze()
         if start_date is not None:
             observations = observations[observations.index>=start_date]
         if end_date is not None:
@@ -42,6 +42,7 @@ class FRED():
         output['observations'] = observations
         
         return output if details else observations
+    
 
 
 

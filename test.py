@@ -17,7 +17,8 @@ fred = htfred.FRED(apikey = "75d754e2105704e2fbb857cfc31db71b")
 
 test1 = fred.get_series_info(sid='AMXTNO')
 test2 = fred.get_series_data(sid='AMXTNO', freq='m', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(1990,1,1))
-
+test3 = fred.get_series_data(sid='AMXTTI', freq='m', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(1990,1,1))
+data = test2.to_frame().join(test3, how='outer')
 
 sample = sp500_close_price['A US Equity']
 
