@@ -11,9 +11,25 @@ URL_SERIES_OBSERVATION = "https://api.stlouisfed.org/fred/series/observations?se
 URL_RELEASE = "https://api.stlouisfed.org/fred/release/series?release_id={sid}&api_key={apikey}&file_type={file_type}"
 
 UNITS = {
-    'yoy-chg':'ch1',
-    'yoy-pct':'pc1',
-    'ytd_pct':'pca',
-    'pop-chg':'chg',
-    'pop-pct':'pch'
+    'Change':'chg',
+    'Change from Year Ago':'ch1',
+    'Percent Change':'pch',
+    'Percent Change from Year Ago':'pc1',
+    'Compounded Annual Rate of Change':'pca',
+    }
+
+FREQUENCIES = {
+    'Daily':'d',
+    'Weekly':'w',
+    'Biweekly':'bw',
+    'Monthly':'m',
+    'Quarterly':'q',
+    'Seminannual':'sa',
+    'Annual':'a',
+    }
+
+AGGREGATION = {
+    'Average':'avg',
+    'Sum':'sum',
+    'End of Period':'eop',
     }

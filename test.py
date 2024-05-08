@@ -7,20 +7,20 @@ Created on Wed Apr 24 20:52:40 2024
 
 import datetime as dt
 import pandas as pd
-from tongubako.htfred import FRED
+from tongubako import htfred
 from tongubako.PCA import RPPCA
 from tongubako.data_sample import sp500_close_price
 
 from tongubako.technical_analysis import IchimokuCloud
+fred = htfred.FRED(apikey = "75d754e2105704e2fbb857cfc31db71b")
 
 
-test = FRED(apikey = "75d754e2105704e2fbb857cfc31db71b")
-test1 = test.get_series_info(sid='GDP')
-test2 = test.get_series_data(sid='PPIACO', freq='m', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(2021,1,1))
+test1 = fred.get_series_info(sid='AMXTNO')
+test2 = fred.get_series_data(sid='AMXTNO', freq='m', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(1990,1,1))
 
 
-sample = sp500_close_price['AAPL US Equity']
+sample = sp500_close_price['A US Equity']
 
-test = IchimokuCloud()
-test1 = test.fit(sample)
-test.plot(period=500)
+ichimoku = IchimokuCloud()
+test1 = ichimoku.fit(sample)
+ichimoku.plot(period=500)

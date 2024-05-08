@@ -27,6 +27,8 @@ def process_series_observation(data, point_in_time='last', drop_realtime=True):
     if drop_realtime:
         observations = observations.drop(['realtime_start','realtime_end'], axis=1)
     
+    observations['value'] = observations['value'].apply(lambda x: float(x))
+    
     return observations
 
 def process_series_info_with_observation(info, observation):
@@ -36,7 +38,7 @@ def process_series_info_with_observation(info, observation):
 
 def adjust_series_observation_bound(observation, freq, bound_type='last'):
     
-    if bound_type.upper() in ['DEFAULT']:
+    if bound_type.upper() in ['DEFAULT','ORIGINAL']:
         pass
     else:
         observation.index = pd.Series(observation.index).apply(lambda x: period_bound(x, freq, bound_type=bound_type))
