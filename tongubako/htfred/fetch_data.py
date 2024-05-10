@@ -15,13 +15,13 @@ from . import settings
 
 
 
-def get_series_info(sid, apikey, file_type='json'):
-    x = requests.get(settings.URL_SERIES_INFO.format(sid=sid, apikey=apikey, file_type=file_type))
+def get_series_info(sid, apikey, file_type='json', proxies=None):
+    x = requests.get(settings.URL_SERIES_INFO.format(sid=sid, apikey=apikey, file_type=file_type), proxies=proxies)
     data = json.loads(x.content)['seriess'][0]
     return data
 
-def search_series(search_text, apikey, file_type='json'):
-    x = requests.get(settings.URL_SERIES_SEARCH.format(search_text=search_text.replace(' ','+'), apikey=apikey, file_type=file_type))
+def search_series(search_text, apikey, file_type='json', proxies=None):
+    x = requests.get(settings.URL_SERIES_SEARCH.format(search_text=search_text.replace(' ','+'), apikey=apikey, file_type=file_type), proxies=proxies)
     data = json.loads(x.content)
     return data['seriess']
 

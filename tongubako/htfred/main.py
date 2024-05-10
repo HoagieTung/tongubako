@@ -26,7 +26,7 @@ class FRED():
     
     def get_series_data(self, sid, freq=None, aggregate='eop', units=None, bound_type='last', start_date=None, end_date=None, realtime_start=None, realtime_end=None, details=False):
         raw_data = fetch_data.get_series_observations(sid=sid, freq=freq , aggregate=aggregate, units=units, apikey=self.apikey, realtime_start=realtime_start, realtime_end=realtime_end, proxies=self.proxies)
-        series_info = fetch_data.get_series_info(sid=sid, apikey=self.apikey, file_type='json')
+        series_info = fetch_data.get_series_info(sid=sid, apikey=self.apikey, file_type='json', proxies=self.proxies)
         observations = process_data.process_series_observation(data=raw_data, point_in_time='last', drop_realtime=True).rename(columns={'value':sid+'_'+units if units is not None else sid})
         
         output = {}
