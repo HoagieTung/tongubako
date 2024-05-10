@@ -16,12 +16,13 @@ from tongubako.utils import guess_frequency
 from . import fetch_data, process_data
 
 class FRED():
-    def __init__(self, apikey):
+    def __init__(self, apikey, proxies):
         self.apikey = apikey
+        self.proxies = proxies
         return
     
     def get_series_info(self, sid):
-        return  fetch_data.get_series_info(sid, self.apikey, file_type='json')
+        return  fetch_data.get_series_info(sid, self.apikey, file_type='json', proxies=self.proxies)
     
     def get_series_data(self, sid, freq=None, aggregate='eop', units=None, bound_type='last', start_date=None, end_date=None, realtime_start=None, realtime_end=None, details=False):
         raw_data = fetch_data.get_series_observations(sid=sid, freq=freq , aggregate=aggregate, units=units, apikey=self.apikey, realtime_start=realtime_start, realtime_end=realtime_end)

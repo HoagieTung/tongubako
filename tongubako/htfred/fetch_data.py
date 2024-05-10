@@ -25,7 +25,7 @@ def search_series(search_text, apikey, file_type='json'):
     data = json.loads(x.content)
     return data['seriess']
 
-def get_series_observations(sid, apikey, units=None, freq=None, aggregate='eop', realtime_start=None, realtime_end=None, file_type='json'):
+def get_series_observations(sid, apikey, units=None, freq=None, aggregate='eop', realtime_start=None, realtime_end=None, file_type='json', proxies=None):
     url = settings.URL_SERIES_OBSERVATION.format(sid=sid, apikey=apikey, file_type=file_type)
     if realtime_start is not None:
         url += '&realtime_start={}'.format(realtime_start.strftime('%Y-%m-%d'))
@@ -37,7 +37,8 @@ def get_series_observations(sid, apikey, units=None, freq=None, aggregate='eop',
         url += '&aggregation_method={}'.format(aggregate)
     if units is not None:
         url += '&units={}'.format(units)
-    x = requests.get(url)
+    
+    x = requests.get(url, proxies = proxies)
     data = json.loads(x.content)
     return data
 
