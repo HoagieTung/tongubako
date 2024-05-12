@@ -10,6 +10,7 @@ import pandas as pd
 from tongubako import htfred
 from tongubako.PCA import RPPCA
 from tongubako.data_sample import sp500_close_price
+from tongubako import plotify
 
 from tongubako.technical_analysis import IchimokuCloud
 fred = htfred.FRED(apikey = "75d754e2105704e2fbb857cfc31db71b")
@@ -25,3 +26,9 @@ sample = sp500_close_price['A US Equity']
 ichimoku = IchimokuCloud()
 test1 = ichimoku.fit(sample)
 ichimoku.plot(period=500)
+
+
+test = plotify.Constructor()
+test.add_data(x=data.index, y=data)
+test.add_labels(['Industrial_New_Orders_YoY','Industrial_Inventories_Orders_YoY'])
+test.set_axis(['L1','R1'])
