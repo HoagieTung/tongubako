@@ -12,7 +12,7 @@ import numpy as np
 from .util import move_spine
 
 def line(constructor, **kwargs):
-    fig, ax_left_1 = plt.subplots()
+    fig, axL1 = plt.subplots() 
     
     
     

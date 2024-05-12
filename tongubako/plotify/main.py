@@ -26,6 +26,7 @@ class Constructor():
         "chart_title",
         "axis",
         "labels",
+        "axis_range",
     ]
     
     def __init__(self):
@@ -40,6 +41,7 @@ class Constructor():
         self.x_title, self.y_title, self.z_title, self.chart_title = None, None, None, None
         self.axis = {}
         self.labels = {}
+        self.axis_range = {}
     
     def regulate_data(self, x, y):
         if isinstance(y, list):
@@ -88,6 +90,9 @@ class Constructor():
             for i in range(len(self.y.columns)):
                 if self.y.columns[i] not in axis_mapping.keys():
                     axis_mapping[self.y.columns[i]] = self.y.columns[i]
+    
+    def set_axis_range(self, axis_range_mapping):
+        
         
         
     
