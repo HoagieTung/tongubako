@@ -15,17 +15,17 @@ from . import settings
 
 
 
-def get_series_info(sid, apikey, file_type='json'):
-    x = requests.get(settings.URL_SERIES_INFO.format(sid=sid, apikey=apikey, file_type=file_type))
+def get_series_info(sid, apikey, file_type='json', proxies=None):
+    x = requests.get(settings.URL_SERIES_INFO.format(sid=sid, apikey=apikey, file_type=file_type), proxies=proxies)
     data = json.loads(x.content)['seriess'][0]
     return data
 
-def search_series(search_text, apikey, file_type='json'):
-    x = requests.get(settings.URL_SERIES_SEARCH.format(search_text=search_text.replace(' ','+'), apikey=apikey, file_type=file_type))
+def search_series(search_text, apikey, file_type='json', proxies=None):
+    x = requests.get(settings.URL_SERIES_SEARCH.format(search_text=search_text.replace(' ','+'), apikey=apikey, file_type=file_type), proxies=proxies)
     data = json.loads(x.content)
     return data['seriess']
 
-def get_series_observations(sid, apikey, units=None, freq=None, aggregate='eop', realtime_start=None, realtime_end=None, file_type='json'):
+def get_series_observations(sid, apikey, units=None, freq=None, aggregate='eop', realtime_start=None, realtime_end=None, file_type='json', proxies=None):
     url = settings.URL_SERIES_OBSERVATION.format(sid=sid, apikey=apikey, file_type=file_type)
     if realtime_start is not None:
         url += '&realtime_start={}'.format(realtime_start.strftime('%Y-%m-%d'))
@@ -37,7 +37,8 @@ def get_series_observations(sid, apikey, units=None, freq=None, aggregate='eop',
         url += '&aggregation_method={}'.format(aggregate)
     if units is not None:
         url += '&units={}'.format(units)
-    x = requests.get(url)
+    
+    x = requests.get(url, proxies = proxies)
     data = json.loads(x.content)
     return data
 
