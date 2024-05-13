@@ -35,8 +35,8 @@ class Constructor():
     def reset(self):
         self.x, self.y = None, None
         self.chart_type = None
-        self.style = None
-        self.figsize = (16,10)
+        self.style = 'default'
+        self.figsize = (8,5)
         self.color = {}
         self.x_title, self.y_title, self.z_title, self.chart_title = None, None, None, None
         self.axis = {}
@@ -91,8 +91,10 @@ class Constructor():
                 if self.y.columns[i] not in axis_mapping.keys():
                     axis_mapping[self.y.columns[i]] = self.y.columns[i]
     
-    def set_axis_range(self, axis_range_mapping):
+    
+    def set_titles(self, titles_mapping):
         
+        return
         
         
     

@@ -17,9 +17,10 @@ fred = htfred.FRED(apikey = "75d754e2105704e2fbb857cfc31db71b")
 
 
 test1 = fred.get_series_info(sid='AMXTNO')
-test2 = fred.get_series_data(sid='AMXTNO', freq='m', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(1990,1,1))
-test3 = fred.get_series_data(sid='AMXTTI', freq='m', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(1990,1,1))
-data = test2.to_frame().join(test3, how='outer')
+test2 = fred.get_series_data(sid='AMXTNO', freq='m', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(2000,1,1))
+test3 = fred.get_series_data(sid='AMXTTI', freq='m', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(2000,1,1))
+test4 = fred.get_series_data(sid='PPIACO', freq='m', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(2000,1,1))
+data = test2.to_frame().join(test3, how='outer').join(test4, how='outer')
 
 sample = sp500_close_price['A US Equity']
 
@@ -30,5 +31,7 @@ ichimoku.plot(period=500)
 
 test = plotify.Constructor()
 test.add_data(x=data.index, y=data)
-test.add_labels(['Industrial_New_Orders_YoY','Industrial_Inventories_Orders_YoY'])
-test.set_axis(['L1','R1'])
+test.add_labels(['Industrial_New_Orders_YoY','Industrial_Inventories_Orders_YoY','PPI_YoY'])
+test.set_axis(['L1','R1','R2'])
+
+plotify.line(test)

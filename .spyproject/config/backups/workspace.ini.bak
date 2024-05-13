@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['test.py', 'tongubako\\htfred\\settings.py', 'tongubako\\PCA\\RPPCA.py', 'tongubako\\htfred\\main.py', 'tongubako\\htfred\\process_data.py', 'tongubako\\htfred\\fetch_data.py', 'tongubako\\htfred\\__init__.py']
+recent_files = ['test.py', 'tongubako\\htfred\\settings.py', 'tongubako\\htfred\\main.py', 'tongubako\\htfred\\process_data.py', 'tongubako\\htfred\\fetch_data.py', 'tongubako\\plotify\\main.py', 'tongubako\\plotify\\line_graph.py', 'tongubako\\plotify\\__init__.py']
 
 [main]
 version = 0.2.0
