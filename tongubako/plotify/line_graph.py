@@ -36,12 +36,20 @@ def line(constructor, **kwargs):
         splines[axis].set_ylabel(label)
         splines[axis].yaxis.label.set_color(plots[name][0].get_color())
         
-        if axis == 'R2':
-        
-            splines[axis].spines['right'].set_position(('outward', 60))
-            splines[axis].set_frame_on(True)
+        if 'R' in axis.upper():
+            n = int(axis.replace('R','').replace('r','')) - 1
+            splines[axis].spines['right'].set_position(('outward', 60*n))
             splines[axis].patch.set_visible(False)
             splines[axis].spines['right'].set_visible(True)
+            splines[axis].get_yaxis().set_tick_params(direction='out')
+        
+        elif 'L' in axis.upper():
+            n = int(axis.replace('L','').replace('l','')) - 1
+            splines[axis].spines['left'].set_position(('outward', 60*n))
+            splines[axis].patch.set_visible(False)
+            splines[axis].spines['left'].set_visible(True)
+            splines[axis].yaxis.set_label_position('left')
+            splines[axis].yaxis.set_ticks_position('left')
             splines[axis].get_yaxis().set_tick_params(direction='out')
            
     

@@ -24,6 +24,7 @@ class Constructor():
         "y_title",
         "z_title",
         "chart_title",
+        "axis_title",
         "axis",
         "labels",
         "axis_range",
@@ -40,6 +41,7 @@ class Constructor():
         self.color = {}
         self.x_title, self.y_title, self.z_title, self.chart_title = None, None, None, None
         self.axis = {}
+        self.axis_title = {}
         self.labels = {}
         self.axis_range = {}
     
@@ -80,10 +82,13 @@ class Constructor():
                 if self.y.columns[i] not in labels_mapping.keys():
                     self.labels[self.y.columns[i]] = self.y.columns[i]
 
-    def set_axis(self, axis_mapping):
+    def set_axis(self, axis_mapping=None):
         if not bool(self.labels):
             raise ValueError("Add labels before setting axis, use the add_labels function")
-        if isinstance(axis_mapping, list):
+        if axis_mapping is None:
+            for i in range(len(self.y.columns)):
+                self.axis[self.y.columns[i]] = 'L1'
+        elif isinstance(axis_mapping, list):
             for i in range(len(self.y.columns)):
                 self.axis[self.y.columns[i]] = axis_mapping[i]
         elif isinstance(axis_mapping, dict):
@@ -92,10 +97,23 @@ class Constructor():
                     axis_mapping[self.y.columns[i]] = self.y.columns[i]
     
     
-    def set_titles(self, titles_mapping):
+    def add_axis_titles(self, axis_titles_mapping=None):
+        if not bool(self.axis):
+            raise ValueError("Set axis before adding axis titles, use the set_axis function")
+        
+        if axis_titles_mapping is None:
+            for key, item in self.axis.items():
+                label = self.label[key]
+                self.axis_title[item] = label               
+        elif isinstance(axis_titles_mapping, dict):
+            self.axis_title = axis_titles_mapping
+        else:
+            raise TypeError("axis_title_mapping must be a dictionary")
+        return
+    
+    def construct(self, *kwargs):
         
         return
-        
         
     
 
