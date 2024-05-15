@@ -25,6 +25,7 @@ class Constructor():
         "z_title",
         "chart_title",
         "axis_title",
+        "axis_range",
         "axis",
         "labels",
         "axis_range",
@@ -35,13 +36,14 @@ class Constructor():
         
     def reset(self):
         self.x, self.y = None, None
-        self.chart_type = None
+        self.chart_type = 'line'
         self.style = 'default'
         self.figsize = (8,5)
         self.color = {}
         self.x_title, self.y_title, self.z_title, self.chart_title = None, None, None, None
         self.axis = {}
         self.axis_title = {}
+        self.axis_range = {'L1':None,'L2':None,'R1':None,'R2':None,}
         self.labels = {}
         self.axis_range = {}
     
@@ -53,15 +55,6 @@ class Constructor():
         if len(x) != len(y.index):
             raise ValueError("x and y must have the same length")
         return x, y
-    
-    def set_type(self, chart_type_mapping):
-        if isinstance(chart_type_mapping, str):
-            self.chart_type = chart_type_mapping
-        elif isinstance(chart_type_mapping, list):
-            for i in range(len(self.y.columns)):
-                self.chart_type[self.y.columns[i]] = chart_type_mapping[i]
-        elif isinstance(chart_type_mapping, dict):
-            self.chart_type = chart_type_mapping
     
     def add_data(self, x, y):
         self.x, self.y = self.regulate_data(x, y)
@@ -103,7 +96,7 @@ class Constructor():
         
         if axis_titles_mapping is None:
             for key, item in self.axis.items():
-                label = self.label[key]
+                label = self.labels[key]
                 self.axis_title[item] = label               
         elif isinstance(axis_titles_mapping, dict):
             self.axis_title = axis_titles_mapping
@@ -111,8 +104,25 @@ class Constructor():
             raise TypeError("axis_title_mapping must be a dictionary")
         return
     
-    def construct(self, *kwargs):
-        
+    def set_axis_range(self, axis_range_mapping=None):
+        if axis_range_mapping is None:
+            for key, item in self.axis.items():
+                self.axis_range[item] = None
+        elif not isinstance(axis_range_mapping, dict):
+            raise TypeError("axis_range_mapping must be a dictionary")
+        else:
+            for key, item in axis_range_mapping.items():
+                self.axis[key] = item
+        return
+    
+    def make_figure(self, x, y, labels=None, axis=None, axis_title=None, chart_type='line', figsize=(8,5), axis_range=None, *kwargs):
+        self.chart_type = chart_type
+        self.add_data(x, y)
+        self.add_labels(labels)
+        self.set_axis(axis)
+        self.add_axis_titles(axis_title)
+        self.set_axis_range(axis_range)
+        self.figsize = figsize
         return
         
     

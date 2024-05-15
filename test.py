@@ -30,9 +30,6 @@ ichimoku.plot(period=500)
 
 
 test = plotify.Constructor()
-test.add_data(x=data.index, y=data)
-test.add_labels(['Industrial_New_Orders_YoY','Industrial_Inventories_Orders_YoY','PPI_YoY'])
-test.set_axis(['L1','R1','L1'])
-#test.add_axis_titles({'L1':'Fuck','R1':'Shit','L2':'Crap','R2':'Pussy'})
 
+test.make_figure(x=data.index, y=data, labels=['Industrial New Orders YoY','Industrial Inventories YoY','PPI YoY'], axis=['L1','R1','R2'], figsize=(10,5))
 plotify.line(test)

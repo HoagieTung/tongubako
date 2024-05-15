@@ -13,46 +13,46 @@ from .util import move_spine, make_patch_spines_invisible
 
 colors = ['k','r','b']
 
-def line(constructor, **kwargs):
+def line(constructor, show=False, **kwargs):
     plt.style.use('default')
-    splines = {}
+    axes = {}
     plots = {}
-    fig, splines['L1'] = plt.subplots(figsize=constructor.figsize, layout='constrained')
-    splines['L1'].patch.set_visible(False)
-    splines['L1'].spines['left'].set_visible(True)
+    fig, axes['L1'] = plt.subplots(figsize=constructor.figsize, layout='constrained')
+    axes['L1'].patch.set_visible(False)
+    axes['L1'].spines['left'].set_visible(True)
     
     
     for k in list(constructor.axis.values()):
         if k == 'L1':
             continue
-        splines[k] = splines['L1'].twinx()
+        axes[k] = axes['L1'].twinx()
     
     for k in range(len(constructor.y.columns)):
         name = constructor.y.columns[k]
         label = constructor.labels[name]
         axis = constructor.axis[name]
 
-        plots[name] = splines[axis].plot(constructor.x, constructor.y.iloc[:,k], color=colors[k], label=label)
-        splines[axis].set_ylabel(label)
-        splines[axis].yaxis.label.set_color(plots[name][0].get_color())
+        plots[name] = axes[axis].plot(constructor.x, constructor.y.iloc[:,k], color=colors[k], label=label)
+        axes[axis].set_ylabel(label)
+        axes[axis].yaxis.label.set_color(plots[name][0].get_color())
         
         if 'R' in axis.upper():
             n = int(axis.replace('R','').replace('r','')) - 1
-            splines[axis].spines['right'].set_position(('outward', 60*n))
-            splines[axis].patch.set_visible(False)
-            splines[axis].spines['right'].set_visible(True)
-            splines[axis].get_yaxis().set_tick_params(direction='out')
+            axes[axis].spines['right'].set_position(('outward', constructor.figsize[0]*5*n))
+            axes[axis].patch.set_visible(False)
+            axes[axis].spines['right'].set_visible(True)
+            axes[axis].get_yaxis().set_tick_params(direction='out')
         
         elif 'L' in axis.upper():
             n = int(axis.replace('L','').replace('l','')) - 1
-            splines[axis].spines['left'].set_position(('outward', 60*n))
-            splines[axis].patch.set_visible(False)
-            splines[axis].spines['left'].set_visible(True)
-            splines[axis].yaxis.set_label_position('left')
-            splines[axis].yaxis.set_ticks_position('left')
-            splines[axis].get_yaxis().set_tick_params(direction='out')
+            axes[axis].spines['left'].set_position(('outward', constructor.figsize[0]*5*n))
+            axes[axis].patch.set_visible(False)
+            axes[axis].spines['left'].set_visible(True)
+            axes[axis].yaxis.set_label_position('left')
+            axes[axis].yaxis.set_ticks_position('left')
+            axes[axis].get_yaxis().set_tick_params(direction='out')
            
-    
-    fig.show()
-    
-    return
+    if show:
+        fig.show()
+
+    return fig
