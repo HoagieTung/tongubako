@@ -38,20 +38,26 @@ def line(constructor, show=False, **kwargs):
         
         if 'R' in axis.upper():
             n = int(axis.replace('R','').replace('r','')) - 1
-            axes[axis].spines['right'].set_position(('outward', constructor.figsize[0]*5*n))
+            axes[axis].spines['right'].set_position(('outward', constructor.axis_shift*n))
             axes[axis].patch.set_visible(False)
             axes[axis].spines['right'].set_visible(True)
             axes[axis].get_yaxis().set_tick_params(direction='out')
         
         elif 'L' in axis.upper():
             n = int(axis.replace('L','').replace('l','')) - 1
-            axes[axis].spines['left'].set_position(('outward', constructor.figsize[0]*5*n))
+            axes[axis].spines['left'].set_position(('outward', constructor.axis_shift*n))
             axes[axis].patch.set_visible(False)
             axes[axis].spines['left'].set_visible(True)
             axes[axis].yaxis.set_label_position('left')
             axes[axis].yaxis.set_ticks_position('left')
             axes[axis].get_yaxis().set_tick_params(direction='out')
-           
+    
+        plt.legend(loc='best')
+    
+    for key, item in constructor.axis_range.items():
+        if item is not None:
+            axes[key].set_ylim(item[0], item[1])
+    
     if show:
         fig.show()
 

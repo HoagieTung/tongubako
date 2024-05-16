@@ -26,9 +26,9 @@ class Constructor():
         "chart_title",
         "axis_title",
         "axis_range",
+        "axis_shift",
         "axis",
-        "labels",
-        "axis_range",
+        "labels", 
     ]
     
     def __init__(self):
@@ -105,17 +105,21 @@ class Constructor():
         return
     
     def set_axis_range(self, axis_range_mapping=None):
+        
+        for key, item in self.axis.items():
+            self.axis_range[item] = None
+        
         if axis_range_mapping is None:
-            for key, item in self.axis.items():
-                self.axis_range[item] = None
+            pass
         elif not isinstance(axis_range_mapping, dict):
             raise TypeError("axis_range_mapping must be a dictionary")
         else:
             for key, item in axis_range_mapping.items():
-                self.axis[key] = item
+                self.axis_range[key] = item
         return
     
-    def make_figure(self, x, y, labels=None, axis=None, axis_title=None, chart_type='line', figsize=(8,5), axis_range=None, *kwargs):
+
+    def make_figure(self, x, y, labels=None, axis=None, axis_title=None, chart_type='line', figsize=(8,5), axis_range=None, axis_shift=50, *kwargs):
         self.chart_type = chart_type
         self.add_data(x, y)
         self.add_labels(labels)
@@ -123,6 +127,7 @@ class Constructor():
         self.add_axis_titles(axis_title)
         self.set_axis_range(axis_range)
         self.figsize = figsize
+        self.axis_shift = axis_shift
         return
         
     
