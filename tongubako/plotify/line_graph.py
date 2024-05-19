@@ -11,7 +11,6 @@ import numpy as np
 
 from .util import move_spine, make_patch_spines_invisible
 
-colors = ['k','r','b']
 
 def line(constructor, show=False, **kwargs):
     plt.style.use('default')
@@ -24,15 +23,21 @@ def line(constructor, show=False, **kwargs):
     
     for k in list(constructor.axis.values()):
         if k == 'L1':
+            axes[k].grid(visible=True)
             continue
         axes[k] = axes['L1'].twinx()
+        axes[k].set_zorder(axes['L1'].get_zorder()-1)
     
     for k in range(len(constructor.y.columns)):
         name = constructor.y.columns[k]
         label = constructor.labels[name]
         axis = constructor.axis[name]
-
-        plots[name] = axes[axis].plot(constructor.x, constructor.y.iloc[:,k], color=colors[k], label=label)
+        color = constructor.color[name]
+        order = constructor.order[name]
+        style = constructor.style[name]
+        width = constructor.width[name]
+        
+        plots[name] = axes[axis].plot(constructor.x, constructor.y.iloc[:,k], color=color, label=label, zorder=order, linestyle=style, linewidth=width)
         axes[axis].set_ylabel(label)
         axes[axis].yaxis.label.set_color(plots[name][0].get_color())
         
@@ -52,7 +57,7 @@ def line(constructor, show=False, **kwargs):
             axes[axis].yaxis.set_ticks_position('left')
             axes[axis].get_yaxis().set_tick_params(direction='out')
     
-        plt.legend(loc='best')
+    plt.legend(loc='best')
     
     for key, item in constructor.axis_range.items():
         if item is not None:

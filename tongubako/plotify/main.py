@@ -11,6 +11,7 @@ import datetime as dt
 from tongubako.utils import guess_frequency
 import matplotlib.pyplot as plt 
 
+colors = ['maroon','black','blue']
 
 class Constructor():
     __slots__ = [
@@ -18,6 +19,7 @@ class Constructor():
         "y",
         "chart_type",
         "style",
+        "width",
         "figsize",
         "color",
         "x_title",
@@ -29,6 +31,7 @@ class Constructor():
         "axis_shift",
         "axis",
         "labels", 
+        "order",
     ]
     
     def __init__(self):
@@ -37,7 +40,8 @@ class Constructor():
     def reset(self):
         self.x, self.y = None, None
         self.chart_type = 'line'
-        self.style = 'default'
+        self.style = {}
+        self.width = {}
         self.figsize = (8,5)
         self.color = {}
         self.x_title, self.y_title, self.z_title, self.chart_title = None, None, None, None
@@ -46,6 +50,7 @@ class Constructor():
         self.axis_range = {'L1':None,'L2':None,'R1':None,'R2':None,}
         self.labels = {}
         self.axis_range = {}
+        self.order = {}
     
     def regulate_data(self, x, y):
         if isinstance(y, list):
@@ -62,10 +67,12 @@ class Constructor():
     def add_labels(self, labels_mapping=None):
         if self.y is None:
             raise ValueError("Add data before adding labels, use the add_data function")
+        
+        for i in range(len(self.y.columns)):
+            self.labels[self.y.columns[i]] = self.y.columns[i]
+        
         if labels_mapping is None:
-            for i in range(len(self.y.columns)):
-                if self.y.columns[i] not in labels_mapping.keys():
-                    self.labels[self.y.columns[i]] = self.y.columns[i]
+            pass
         elif isinstance(labels_mapping, list):
             for i in range(len(self.y.columns)):
                 self.labels[self.y.columns[i]] = labels_mapping[i]
@@ -87,8 +94,39 @@ class Constructor():
         elif isinstance(axis_mapping, dict):
             for i in range(len(self.y.columns)):
                 if self.y.columns[i] not in axis_mapping.keys():
-                    axis_mapping[self.y.columns[i]] = self.y.columns[i]
+                    self.axis[self.y.columns[i]] = self.y.columns[i]
     
+    def set_color(self, color_mapping=None):
+        if not bool(self.labels):
+            raise ValueError("Add labels before setting axis, use the add_labels function")
+        
+        for i in range(len(self.y.columns)):
+            self.color[self.y.columns[i]] = colors[i]
+        if color_mapping is None:
+           pass
+        elif isinstance(color_mapping, list):
+            for i in range(len(self.y.columns)):
+                self.color[self.y.columns[i]] = color_mapping[i]
+        elif isinstance(color_mapping, dict):
+            for i in range(len(self.y.columns)):
+                if self.y.columns[i] not in color_mapping.keys():
+                    self.color[self.y.columns[i]] = self.y.columns[i]
+    
+    def set_order(self, order_mapping=None):
+        if not bool(self.labels):
+            raise ValueError("Add labels before setting axis, use the add_labels function")
+        
+        for i in range(len(self.y.columns)):
+            self.order[self.y.columns[i]] = 10-i
+        if order_mapping is None:
+           pass
+        elif isinstance(order_mapping, list):
+            for i in range(len(self.y.columns)):
+                self.order[self.y.columns[i]] = order_mapping[i]
+        elif isinstance(order_mapping, dict):
+            for i in range(len(self.y.columns)):
+                if self.y.columns[i] not in order_mapping.keys():
+                    self.order[self.y.columns[i]] = self.y.columns[i]
     
     def add_axis_titles(self, axis_titles_mapping=None):
         if not bool(self.axis):
@@ -118,14 +156,48 @@ class Constructor():
                 self.axis_range[key] = item
         return
     
+    def set_style(self, style_mapping=None):
+        if not bool(self.labels):
+            raise ValueError("Add labels before setting axis, use the add_labels function")
+        
+        for i in range(len(self.y.columns)):
+            self.style[self.y.columns[i]] = None
+        if style_mapping is None:
+           pass
+        elif isinstance(style_mapping, list):
+            for i in range(len(self.y.columns)):
+                self.style[self.y.columns[i]] = style_mapping[i]
+        elif isinstance(style_mapping, dict):
+            for key, item in style_mapping.items():
+                self.style[key] = item
+    
+    def set_width(self, width_mapping=None):
+        if not bool(self.labels):
+            raise ValueError("Add labels before setting axis, use the add_labels function")
+        
+        for i in range(len(self.y.columns)):
+            self.width[self.y.columns[i]] = None
+        if width_mapping is None:
+           pass
+        elif isinstance(width_mapping, list):
+            for i in range(len(self.y.columns)):
+                self.width[self.y.columns[i]] = width_mapping[i]
+        elif isinstance(width_mapping, dict):
+            for key, item in width_mapping.items():
+                self.width[key] = item
+        
 
-    def make_figure(self, x, y, labels=None, axis=None, axis_title=None, chart_type='line', figsize=(8,5), axis_range=None, axis_shift=50, *kwargs):
+    def make_figure(self, x, y, labels=None, axis=None, axis_title=None, chart_type='line', figsize=(8,5), axis_range=None, axis_shift=50, color=None, order=None, style=None, width=None, *kwargs):
         self.chart_type = chart_type
         self.add_data(x, y)
         self.add_labels(labels)
         self.set_axis(axis)
         self.add_axis_titles(axis_title)
         self.set_axis_range(axis_range)
+        self.set_color(color)
+        self.set_order(order)
+        self.set_style(style)
+        self.set_width(width)
         self.figsize = figsize
         self.axis_shift = axis_shift
         return
