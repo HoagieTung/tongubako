@@ -32,5 +32,5 @@ ichimoku.plot(period=500)
 
 test = plotify.Constructor()
 
-test.make_figure(x=data.index, y=data, labels=['Industrial New Orders YoY','Industrial Inventories YoY','PPI YoY'], axis=['L1','R1','R2'], figsize=(8,4), axis_shift=50, style=['-','--','-.'])
-plotify.line(test)
+test.make_figure(x=data.index, y=data, labels=['Industrial New Orders YoY','Industrial Inventories YoY','PPI YoY'], axis=['L1','R1','R2'], figsize=(8,4), axis_shift=50, style=['-','--','-.'], width=[2,2,2])
+test1 = plotify.line(test)
