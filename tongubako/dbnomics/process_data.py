@@ -11,3 +11,8 @@ import pandas as pd
 from datetime import datetime, timezone, timedelta, date
 import requests
 import json 
+
+
+def process_series_observations(data):
+    data['series']['docs'][0]
+    return

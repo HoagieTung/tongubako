@@ -11,10 +11,18 @@ import datetime as dt
 import requests
 import json
 from tongubako.utils import guess_frequency
-
+from . import fetch_data, process_data
 
 class DBnomics():
-    def __init__(self, apikey, proxies=None):
-        self.apikey = apikey
+    def __init__(self, proxies=None):
         self.proxies = proxies
         return
+    
+    def get_series_data(self, sid, freq=None, aggregate='eop', units=None, bound_type='last', start_date=None, end_date=None, realtime_start=None, realtime_end=None, details=False):
+        raw_data = fetch_data.get_series_observations(sid=sid)
+        return
+
+
+if __name__ =="__main__":
+    
+    test = DBnomics()

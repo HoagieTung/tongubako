@@ -15,7 +15,7 @@ import json
 
 
 
-def fetch_series(self, sid):
+def get_series_observations(self, sid):
     url = 'https://api.db.nomics.world/v22/series/{sid}?facets=false&observations=True&metadata=true&format=json&align_periods=true&limit=1000&offset=0'.format(sid=sid)
     x = requests.get(url)
     data = json.loads(x.content)
