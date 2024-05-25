@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['test.py', 'tongubako\\plotify\\main.py', 'tongubako\\plotify\\line_graph.py', 'tongubako\\dbnomics\\main.py', 'tongubako\\dbnomics\\fetch_data.py', '..\\ht_tools\\ht_tools\\pydbnomics.py', 'tongubako\\dbnomics\\process_data.py']
+recent_files = ['test.py', 'tongubako\\plotify\\main.py', 'tongubako\\plotify\\line_graph.py', 'tongubako\\dbnomics\\main.py', 'tongubako\\dbnomics\\fetch_data.py', 'tongubako\\dbnomics\\process_data.py', '..\\ht_tools\\ht_tools\\pydbnomics.py']
 
 [main]
 version = 0.2.0
