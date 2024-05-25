@@ -5,6 +5,9 @@ Created on Sat May 25 14:19:08 2024
 @author: homoi
 """
 
+import pandas as pd
+import numpy as np
+
 class SQL():
     def __init__(self, schema, dbtype='postgres'):
         self.dbtype = dbtype
@@ -12,6 +15,8 @@ class SQL():
     
     
     def connect(self):
+        if self.dbtype.upper() in ['POSTGRES','POSTGRE']:
+            pass
         
         return
     
