@@ -10,9 +10,11 @@ class SQL():
         self.dbtype = dbtype
         self.schema = schema
     
+    
     def connect(self):
         
         return
+    
     
     def insert_dataframe_to_table(self, df, table, delete_clause=None):
         
