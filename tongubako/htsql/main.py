@@ -28,7 +28,9 @@ class SQL():
     def generate_delete_clause(self, columns):
         if isinstance(columns, str):
             columns = [columns]
-       
+        clause = 'WHERE '
+        for col in columns:  
+            clause += '\"{col}\"={}'
         return
         
         
