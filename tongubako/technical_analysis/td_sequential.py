@@ -9,7 +9,6 @@ from datetime import datetime, timedelta, time, date
 import pandas as pd
 import numpy as np
 from tongubako.utils import ts_shift, guess_frequency
-from statsmodels.tsa.ar_model import AR
 import matplotlib.pyplot as plt
 
 class TDSequential:
@@ -45,6 +44,11 @@ class TDSequential:
     
     def find_flip(self, setup):
         
+        return
+    
+    def find_entry(self, setup, price):
+        if len(setup.index) != len(price.index):
+            raise ValueError('Set up and price must have same length')
         return
     
     def regulate_data(self, O, H, L, C):
