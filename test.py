@@ -34,24 +34,3 @@ test = plotify.Constructor()
 
 test.make_figure(x=data.index, y=data, labels=['Industrial New Orders YoY','Industrial Inventories YoY','PPI YoY'], axis=['L1','R1','R2'], figsize=(10,4), axis_shift=50, style=['-','--','-.'])
 test1 = plotify.line(test)
-
-import os
-import psycopg
-
-os.environ['PGHOST'] = 'mistakenly-distinct-anchovy-pdt.a1.pgedge.io'
-os.environ['PGUSER'] = 'app'
-os.environ['PGDATABASE'] = 'htdb'
-os.environ['PGSSLMODE'] = 'require'
-os.environ['PGPASSWORD'] = '83I35jM8pAWSo6BekIa8v805'
-
-def main():
-    connection = psycopg.connect()
-    cursor = connection.cursor()
-    cursor.execute('SELECT node_name FROM spock.node')
-    node_names = [row[0] for row in cursor.fetchall()]
-    cursor.close()
-    connection.close()
-    print(node_names)
-
-if __name__ == '__main__':
-    main()

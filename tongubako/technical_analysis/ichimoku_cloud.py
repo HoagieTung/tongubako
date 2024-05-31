@@ -18,16 +18,16 @@ class IchimokuCloud:
         self.long_period = long_period
         return
     
-    def fit(self, data):
-        freq = guess_frequency(data.index)
+    def fit(self, price):
+        freq = guess_frequency(price.index)
         
-        self.tenkan_sen = self.tenkan_sen(data)
-        self.kijun_sen = self.kijun_sen(data)
+        self.tenkan_sen = self.tenkan_sen(price)
+        self.kijun_sen = self.kijun_sen(price)
         self.senkou_span_a = self.senkou_span_a(self.tenkan_sen, self.kijun_sen, freq)
-        self.senkou_span_b = self.senkou_span_b(data, freq)
-        self.chikou_span = self.chikou_span(data, freq)
+        self.senkou_span_b = self.senkou_span_b(price, freq)
+        self.chikou_span = self.chikou_span(price, freq)
         
-        self.ichimoku_cloud = pd.DataFrame(data).join(self.tenkan_sen, how='outer').join(self.kijun_sen, how='outer').join(self.senkou_span_a, how='outer').join(self.senkou_span_b, how='outer').join(self.chikou_span, how='outer')
+        self.ichimoku_cloud = pd.DataFrame(price).join(self.tenkan_sen, how='outer').join(self.kijun_sen, how='outer').join(self.senkou_span_a, how='outer').join(self.senkou_span_b, how='outer').join(self.chikou_span, how='outer')
         
         return self.ichimoku_cloud
     
