@@ -12,9 +12,8 @@ from tongubako.utils import ts_shift, guess_frequency
 import matplotlib.pyplot as plt
 
 class TDSequential:
-    def __init__(self, short_period=9, long_period=26):
-        self.short_period = short_period
-        self.long_period = long_period
+    def __init__(self, count_down_period=13):
+        self.count_down_period = count_down_period
         return
     
     
@@ -41,6 +40,10 @@ class TDSequential:
                 setup['bull'].iloc[i] = setup['bull'].iloc[i] + 1
             
         return setup
+    
+    def countdown(self, price, set_up):
+        
+        return
     
     def find_flip(self, setup):
         

@@ -6,3 +6,4 @@ Created on Sun May  5 19:43:48 2024
 """
 
 from .ichimoku_cloud import IchimokuCloud
+from .td_sequential import TDSequential
