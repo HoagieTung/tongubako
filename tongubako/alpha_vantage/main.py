@@ -21,9 +21,12 @@ class AlphaVantage():
         self.proxies = proxies
         return
     
-    def get_daily_time_series(self, symbol, start_date=None, end_date=dt.datetime.now().date(), meta_data=False, full_size=False):
-        raw_data = fetch_data.get_time_series_daily(symbol=symbol, apikey=self.apikey, proxies=self.proxies)
-        cleaned_data = process_data.process_time_series_daily(raw_data, start_date=start_date, end_date=end_date)
+    def get_daily_time_series(self, symbol, start_date=None, end_date=dt.datetime.now().date(), meta_data=False, full_size=False, adjusted=False):
+        raw_data = fetch_data.get_time_series_daily(symbol=symbol, apikey=self.apikey, proxies=self.proxies, adjusted=adjusted)
+        if adjusted:
+            cleaned_data = process_data.process_time_series_daily_adjusted(raw_data, start_date=start_date, end_date=end_date)
+        else:
+            cleaned_data = process_data.process_time_series_daily(raw_data, start_date=start_date, end_date=end_date)
         if meta_data:
             return cleaned_data
         else:

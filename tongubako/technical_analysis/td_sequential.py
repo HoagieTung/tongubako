@@ -19,30 +19,37 @@ class TDSequential:
     
     def fit(self, O, H, L, C):
         price = self.regulate_data(O, H, L, C)
-        
+        setup = self.setup(price)
         return
     
     
-    def set_up(self, price):
+    def setup(self, price):
 
-        setup = pd.DataFrame(index=self.price.index, data=0, columns=['bull','bear'])
+        setup = pd.DataFrame(index=self.price.index, data=0, columns=['buy','sell'])
         
         for i in range(5,len(self.price)):
-            if self.price['close'].iloc[i]<self.price['close'].iloc[i-4] and self.price['close'].iloc[i-1]>self.price['close'].iloc[i-5] and setup['bear'].iloc[i-1]==0:
-                setup['bear'].iloc[i] = 1
-            elif 8>=setup['bear'].iloc[i-1]>=1 and self.price['close'].iloc[i]<self.price['close'].iloc[i-4]:
-                setup['bear'].iloc[i] = setup['bear'].iloc[i] + 1
+            if (self.price['close'].iloc[i] > self.price['close'].iloc[i-4]) and (self.price['close'].iloc[i-1] < self.price['close'].iloc[i-5]) and (setup['sell'].iloc[i-1]==0):
+                setup['sell'].iloc[i] = 1
+            elif (8>=setup['sell'].iloc[i-1] >= 1) and (self.price['close'].iloc[i] > self.price['close'].iloc[i-4]):
+                setup['sell'].iloc[i] = setup['sell'].iloc[i-1] + 1
         
         for i in range(5,len(self.price)):
-            if self.price['close'].iloc[i]>self.price['close'].iloc[i-4] and self.price['close'].iloc[i-1]<self.price['close'].iloc[i-5] and setup['bear'].iloc[i-1]==0:
-                setup['bull'].iloc[i] = 1
-            elif 8>=setup['bull'].iloc[i-1]>=1 and self.price['close'].iloc[i]<self.price['close'].iloc[i-4]:
-                setup['bull'].iloc[i] = setup['bull'].iloc[i] + 1
-            
+            if self.price['close'].iloc[i] < self.price['close'].iloc[i-4] and self.price['close'].iloc[i-1] > self.price['close'].iloc[i-5] and setup['buy'].iloc[i-1]==0:
+                setup['buy'].iloc[i] = 1
+            elif 8>=setup['buy'].iloc[i-1] >= 1 and self.price['close'].iloc[i] < self.price['close'].iloc[i-4]:
+                setup['buy'].iloc[i] = setup['buy'].iloc[i-1] + 1
+        
+        fuck = self.price.join(setup)
+        
         return setup
     
-    def countdown(self, price, set_up):
-        
+    def countdown(self, price, setup):
+        if len(price.index) != len(setup.index):
+            raise ValueError('Price series and setup series must have the same length')
+        countdown = pd.DataFrame(index=self.price.index, data=0, columns=['buy','sell'])
+        for i in range(2,len(price.index)):
+            if setup['buy'].iloc[i] == 9:
+                pass
         return
     
     def find_flip(self, setup):

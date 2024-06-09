@@ -15,10 +15,14 @@ import json
 from . import settings
 
 
-def get_time_series_daily(symbol, apikey, full_size=False, proxies=None):
-    url = settings.TIME_SERIES_DAILY_URL.format(symbol=symbol, apikey=apikey)
+def get_time_series_daily(symbol, apikey, adjusted=False, full_size=False, proxies=None):
+    if adjusted:
+        url = settings.TIME_SERIES_DAILY_ADJUSTED_URL.format(symbol=symbol, apikey=apikey)
+    else:
+        url = settings.TIME_SERIES_DAILY_URL.format(symbol=symbol, apikey=apikey)
     if full_size:
         url += '&outputsize=full'
+
     x = requests.get(url, proxies=proxies)
     data = json.loads(x.content)
     return data

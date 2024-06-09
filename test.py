@@ -25,7 +25,7 @@ data = test2.to_frame().join(test3, how='outer').join(test4, how='outer')
 
 
 aplha_vantage = AlphaVantage(apikey='FMY7LTQMB0NZ4BPH')
-sample = aplha_vantage.get_daily_time_series(symbol='AAPL', start_date=dt.date(2010,1,1), full_size=True)
+sample = aplha_vantage.get_daily_time_series(symbol='AAPL', start_date=dt.date(2021,1,1), full_size=True, adjusted=True)
 
 
 
@@ -35,7 +35,7 @@ test1 = ichimoku.fit(sample['close'])
 fig = ichimoku.plot(period=500)
 
 td = TDSequential()
-
+test1 = td.fit(O=sample['open'], H=sample['high'], L=sample['low'], C=sample['close'])
 
 test = plotify.Constructor()
 
