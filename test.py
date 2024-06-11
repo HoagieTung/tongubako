@@ -17,7 +17,7 @@ from tongubako.technical_analysis import TDSequential
 
 fred = htfred.FRED(apikey = "75d754e2105704e2fbb857cfc31db71b")
 
-test1 = fred.get_series_info(sid='AMXTNO')
+test1 = fred.get_series_info(sid='PPIACO')
 test2 = fred.get_series_data(sid='AMXTNO', freq='m', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(1995,1,1))
 test3 = fred.get_series_data(sid='AMXTTI', freq='m', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(1995,1,1))
 test4 = fred.get_series_data(sid='PPIACO', freq='m', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(1995,1,1))
@@ -25,7 +25,7 @@ data = test2.to_frame().join(test3, how='outer').join(test4, how='outer')
 
 
 aplha_vantage = AlphaVantage(apikey='FMY7LTQMB0NZ4BPH')
-sample = aplha_vantage.get_daily_time_series(symbol='AAPL', start_date=dt.date(2021,1,1), full_size=True, adjusted=True)
+sample = aplha_vantage.get_daily_time_series(symbol='AAPL', start_date=dt.date(2021,1,1), full_size=True, adjusted=False)
 
 
 
