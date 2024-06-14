@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['test.py', 'tongubako\\alpha_vantage\\main.py', 'tongubako\\alpha_vantage\\fetch_data.py', 'tongubako\\alpha_vantage\\process_data.py', 'tongubako\\alpha_vantage\\settings.py', 'tongubako\\technical_analysis\\td_sequential.py']
+recent_files = ['test.py', 'tongubako\\alpha_vantage\\main.py', 'tongubako\\alpha_vantage\\fetch_data.py', 'tongubako\\alpha_vantage\\process_data.py', 'tongubako\\technical_analysis\\td_sequential.py', 'tongubako\\jin10data\\main.py', 'tongubako\\jin10data\\fetch_data.py', 'tongubako\\jin10data\\process_data.py']
 
 [main]
 version = 0.2.0
