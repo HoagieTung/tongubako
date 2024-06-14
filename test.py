@@ -41,3 +41,4 @@ test = plotify.Constructor()
 
 test.make_figure(x=data.index, y=data, labels=['Industrial New Orders YoY','Industrial Inventories YoY','PPI YoY'], axis=['L1','R1','R2'], figsize=(10,4), axis_shift=50, style=['-','--','-.'])
 test1 = plotify.line(test)
+
