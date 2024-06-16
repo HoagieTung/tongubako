@@ -9,7 +9,7 @@ import datetime as dt
 import pandas as pd
 from tongubako import htfred
 from tongubako.PCA import RPPCA
-from tongubako.data_sample import sp500_close_price
+from tongubako.data_sample import sp500_close_price, msft_ohlc
 from tongubako import plotify
 from tongubako.alpha_vantage import AlphaVantage
 from tongubako.technical_analysis import IchimokuCloud
@@ -25,7 +25,7 @@ data = test2.to_frame().join(test3, how='outer').join(test4, how='outer')
 
 
 aplha_vantage = AlphaVantage(apikey='FMY7LTQMB0NZ4BPH')
-sample = aplha_vantage.get_daily_time_series(symbol='AAPL', start_date=dt.date(2021,1,1), full_size=True, adjusted=False)
+sample = aplha_vantage.get_daily_time_series(symbol='MSFT', start_date=dt.date(2021,1,1), full_size=True, adjusted=False)
 
 
 
