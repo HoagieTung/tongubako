@@ -10,12 +10,26 @@ import pandas as pd
 import datetime as dt
 import requests
 import json
+import time
 
 #from . import settings
 
 
-def get( proxies=None):
-    x = requests.get("https://datacenter-api.jin10.com/reports/list_v2", proxies=proxies)
+def get_economic_data(sid, proxies=None):
+    params = {
+        "max_date": "",
+        "category": "ec",
+        "attr_id": "58",
+        "_": str(int(round(time.time() * 1000))),
+        }
+    headers = {
+        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/107.0.0.0 Safari/537.36",
+        "x-app-id": "rU6QIu7JHe2gOUeR",
+        "x-csrf-token": "x-csrf-token",
+        "x-version": "1.0.0",
+    }
+    x = requests.get("https://datacenter-api.jin10.com/reports/list_v2", proxies=proxies, params=params, headers=headers)
     data = json.loads(x.content)
     return data
 
