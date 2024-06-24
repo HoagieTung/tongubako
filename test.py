@@ -14,6 +14,7 @@ from tongubako import plotify
 from tongubako.alpha_vantage import AlphaVantage
 from tongubako.technical_analysis import IchimokuCloud
 from tongubako.technical_analysis import TDSequential
+from tongubako.dbmanager import SQL
 
 fred = htfred.FRED(apikey = "75d754e2105704e2fbb857cfc31db71b")
 
@@ -42,3 +43,12 @@ test = plotify.Constructor()
 test.make_figure(x=data.index, y=data, labels=['Industrial New Orders YoY','Industrial Inventories YoY','PPI YoY'], axis=['L1','R1','R2'], figsize=(10,4), axis_shift=50, style=['-','--','-.'])
 test1 = plotify.line(test)
 
+
+test = SQL()
+test.connect(user='admin', password='83I35jM8pAWSo6BekIa8v805',host='mistakenly-distinct-anchovy.a1.pgedge.io', dbname='htdb',port='5432')
+
+testdata = pd.DataFrame(columns=['ID','Date','Value'])
+testdata.loc[0] = ['Test', dt.date(2024,1,1),10.789]
+
+test.insert_df_to_table(df=testdata, table_name='econdata', schema_name='datanexus', if_exists='replace', delete_whereclause='"ID"=\'Test\'')
+test1 = test.get_data_from_table(table_name='econdata', schema_name='datanexus')  
