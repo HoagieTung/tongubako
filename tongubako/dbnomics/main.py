@@ -20,9 +20,11 @@ class DBnomics():
     
     def get_series_data(self, sid, freq=None, aggregate='eop', units=None, bound_type='last', start_date=None, end_date=None, realtime_start=None, realtime_end=None, details=False):
         raw_data = fetch_data.get_series_observations(sid=sid)
-        return
+        return raw_data
 
 
 if __name__ =="__main__":
     
     test = DBnomics()
+    
+    test1 = test.get_series_data(sid=)
