@@ -14,7 +14,7 @@ from tongubako import plotify
 from tongubako.alpha_vantage import AlphaVantage
 from tongubako.technical_analysis import IchimokuCloud
 from tongubako.technical_analysis import TDSequential
-from tongubako.dbmanager import SQL
+
 
 fred = htfred.FRED(apikey = "75d754e2105704e2fbb857cfc31db71b")
 
@@ -44,6 +44,7 @@ test.make_figure(x=data.index, y=data, labels=['Industrial New Orders YoY','Indu
 test1 = plotify.line(test)
 
 
+from tongubako.dbmanager import SQL
 test = SQL()
 test.connect(user='admin', password='83I35jM8pAWSo6BekIa8v805',host='mistakenly-distinct-anchovy.a1.pgedge.io', dbname='htdb',port='5432')
 
@@ -51,4 +52,10 @@ testdata = pd.DataFrame(columns=['ID','Date','Value'])
 testdata.loc[0] = ['Test', dt.date(2024,1,1),10.789]
 
 test.insert_df_to_table(df=testdata, table_name='econdata', schema_name='datanexus', if_exists='replace', delete_whereclause='"ID"=\'Test\'')
-test1 = test.get_data_from_table(table_name='econdata', schema_name='datanexus')  
+test1 = test.get_data_from_table(table_name='econdata', schema_name='datanexus') 
+
+ 
+from tongubako.dbnomics import DBnomics
+test = DBnomics()
+test1 = test.get_series_data(sid='ISM/pmi', details=True)
+test2 = test.get_series_info(sid='ISM/pmi')

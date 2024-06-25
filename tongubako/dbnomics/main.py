@@ -10,7 +10,6 @@ import pandas as pd
 import datetime as dt
 import requests
 import json
-from tongubako.utils import guess_frequency
 from . import fetch_data, process_data
 
 class DBnomics():
@@ -18,13 +17,31 @@ class DBnomics():
         self.proxies = proxies
         return
     
-    def get_series_data(self, sid, freq=None, aggregate='eop', units=None, bound_type='last', start_date=None, end_date=None, realtime_start=None, realtime_end=None, details=False):
+    def get_series_data(self, sid, bound_type='last', start_date=None, end_date=None, details=False):
         raw_data = fetch_data.get_series_observations(sid=sid)
-        return raw_data
+        observations = process_data.process_series_observations(raw_data, bound_type=bound_type)
+        
+        if start_date is not None:
+            observations = observations[observations.index>=start_date]
+        if end_date is not None:
+            observations = observations[observations.index<=end_date]
+        
+        if details:
+            output = {}
+            output['info'] = process_data.process_series_info(raw_data)
+            output['observations'] = observations
+            return output
+        else:
+            return observations
+    
+    def get_series_info(self, sid):
+        raw_data = fetch_data.get_series_observations(sid=sid)
+        info = process_data.process_series_info(raw_data)
+        return info
 
 
 if __name__ =="__main__":
     
     test = DBnomics()
     
-    test1 = test.get_series_data(sid=)
+    test1 = test.get_series_data(sid='ISM/pmi')

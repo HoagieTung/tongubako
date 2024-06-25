@@ -29,10 +29,7 @@ class SQL:
 
         return
     
-    def execute_query(self, query):
-        res = self.connection.execute(query)
-        return res
-    
+
     def insert_df_to_table(self, df, table_name, schema_name=None, modifiedat=True, if_exists='append', delete_whereclause='1=1'):
         
         if modifiedat:
@@ -59,15 +56,14 @@ class SQL:
         return
     
     def get_data_from_table(self, table_name, schema_name=None, columns=None, select_whereclause='1=1'):
-        conn = self.engine.connect()
         try:
             # Execute delete clause
             table_name_quote = '"'+table_name+'"'
             if schema_name is not None:
                 schema_name_quote = '"'+schema_name+'"'
-                res = pd.read_sql(f'SELECT * FROM {schema_name_quote}.{table_name_quote} where {select_whereclause}', conn)
+                res = pd.read_sql(sql.text(f'SELECT * FROM {schema_name_quote}.{table_name_quote} where {select_whereclause}'), self.engine.connect())
             else:
-                res = pd.read_sql(f'SELECT * FROM {table_name_quote} where {select_whereclause}', conn)
+                res = pd.read_sql(sql.text(f'SELECT * FROM {table_name_quote} where {select_whereclause}'), self.engine.connect())
             return res
         except:
             raise ValueError('Something was wrong...')
@@ -87,7 +83,7 @@ if __name__ =="__main__":
     test.connect(user='admin', password='83I35jM8pAWSo6BekIa8v805',host='mistakenly-distinct-anchovy.a1.pgedge.io', dbname='htdb',port='5432')
 
     testdata = pd.DataFrame(columns=['ID','Date','Value'])
-    testdata.loc[0] = ['Test', dt.date(2024,1,1),10.789]
+    testdata.loc[0] = ['Test', dt.date(2024,1,1),10.22343234]
     
     test.insert_df_to_table(df=testdata, table_name='econdata', schema_name='datanexus', if_exists='replace', delete_whereclause='"ID"=\'Test\'')
     test1 = test.get_data_from_table(table_name='econdata', schema_name='datanexus')  
