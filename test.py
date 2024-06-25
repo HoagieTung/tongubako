@@ -44,6 +44,7 @@ test.make_figure(x=data.index, y=data, labels=['Industrial New Orders YoY','Indu
 test1 = plotify.line(test)
 
 
+
 from tongubako.dbmanager import SQL
 test = SQL()
 test.connect(user='admin', password='83I35jM8pAWSo6BekIa8v805',host='mistakenly-distinct-anchovy.a1.pgedge.io', dbname='htdb',port='5432')
