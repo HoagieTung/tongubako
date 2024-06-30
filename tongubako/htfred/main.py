@@ -29,18 +29,23 @@ class FRED():
         series_info = fetch_data.get_series_info(sid=sid, apikey=self.apikey, file_type='json', proxies=self.proxies)
         observations = process_data.process_series_observation(data=raw_data, point_in_time='last', drop_realtime=True).rename(columns={'value':sid+'_'+units if units is not None else sid})
         
-        output = {}
+        info = {}
         freq = guess_frequency(observations.index)
-        output['freq'] =  freq if freq != 'unknown' else series_info['frequency_short']
-        output['sid'], output['title'] = series_info['id'], series_info['title']
-        output['units'] = raw_data['units']
+        info['frequency'] =  freq if freq != 'unknown' else series_info['frequency_short']
+        info['sid'], info['name'] = series_info['id'], series_info['title']
+        info['units'] = raw_data['units']
+        info['last_update'] = dt.datetime.strptime(series_info['last_updated'].split(' ')[0],'%Y-%m-%d').date()
+        info['seasonal_adjustment'] = series_info['seasonal_adjustment']
         
-        observations = process_data.adjust_series_observation_bound(observations, output['freq'], bound_type).squeeze()
+        observations = process_data.adjust_series_observation_bound(observations, info['frequency'], bound_type).squeeze()
         if start_date is not None:
             observations = observations[observations.index>=start_date]
         if end_date is not None:
             observations = observations[observations.index<=end_date]
+        
+        output = {}
         output['observations'] = observations
+        output['info'] = info
         
         return output if details else observations
     
