@@ -45,8 +45,8 @@ test1 = plotify.line(test)
 
 
 
-from tongubako.dbmanager import SQL
-test = SQL()
+from tongubako.dbmanager import PostgreSQL
+test = PostgreSQL()
 test.connect(user='admin', password='83I35jM8pAWSo6BekIa8v805',host='mistakenly-distinct-anchovy.a1.pgedge.io', dbname='htdb',port='5432')
 
 testdata = pd.DataFrame(columns=['ID','Date','Value'])

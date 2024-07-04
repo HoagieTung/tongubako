@@ -12,7 +12,7 @@ import sqlalchemy as sql
 import datetime as dt
 from sqlite3 import Error
 
-class SQL:
+class PostgreSQL:
     def __init__(self, dbtype='POSTGRE'):
         self.dbtype = dbtype
         return
@@ -68,18 +68,12 @@ class SQL:
         except:
             raise ValueError('Something was wrong...')
     
-    def conditional_statement(self, conditions):
-        if not isinstance(conditions, dict):
-            raise TypeError('conditions must be in dict format')
-        condition_list = []
-        for key, item in conditions.items():
-            c = f'"{key}"='
-        return
+
             
     
 if __name__ =="__main__":
     
-    test = SQL()
+    test = PostgreSQL()
     test.connect(user='admin', password='83I35jM8pAWSo6BekIa8v805',host='mistakenly-distinct-anchovy.a1.pgedge.io', dbname='htdb',port='5432')
 
     testdata = pd.DataFrame(columns=['ID','Date','Value'])
