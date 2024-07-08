@@ -57,7 +57,7 @@ def line(constructor, show=False, **kwargs):
             axes[axis].yaxis.set_ticks_position('left')
             axes[axis].get_yaxis().set_tick_params(direction='out')
     
-    plt.legend(loc='best')
+    #plt.legend(loc='best')
     
     for key, item in constructor.axis_range.items():
         if item is not None:
