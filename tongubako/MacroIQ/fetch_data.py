@@ -9,10 +9,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import datetime as dt
+import time
 import requests
 import json
 import warnings
-import foo
+
 warnings.filterwarnings(action="ignore", category=FutureWarning)
 
 def fetch_cn_money_supply(sid, units='yoy', proxies=None):
@@ -89,7 +90,12 @@ def jin10_data(symbol, params):
         "x-version": "1.0.0",
     }
     url = "https://datacenter-api.jin10.com/reports/list_v2"
-    params = params
+    params = {
+        "max_date": "",
+        "category": "ec",
+        "attr_id": "58",
+        "_": str(int(round(time.time() * 1000))),
+    }
     big_df = pd.DataFrame()
     while True:
         r = requests.get(url, params=params, headers=headers)
@@ -135,4 +141,4 @@ def jin10_data(symbol, params):
 
 if __name__ =="__main__":
     
-    test1 = fetch_money_supply(sid='CNM1MS', units='yoy', start_date=None, end_date=None, proxies=None)
+    test1 = fetch_cn_money_supply(sid='CNM1MS', units='yoy', proxies=None)

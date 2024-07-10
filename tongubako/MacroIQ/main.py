@@ -10,7 +10,6 @@ import numpy as np
 import pandas as pd
 import datetime as dt
 import requests
-import foo
 from tongubako.utils import guess_frequency
 
 from . import fetch_data, process_data, settings

@@ -56,12 +56,21 @@ def line(constructor, show=False, **kwargs):
             axes[axis].yaxis.set_label_position('left')
             axes[axis].yaxis.set_ticks_position('left')
             axes[axis].get_yaxis().set_tick_params(direction='out')
-    
+        
+        #plt.legend(handles=plots[name][0], loc='best')
     #plt.legend(loc='best')
     
     for key, item in constructor.axis_range.items():
         if item is not None:
             axes[key].set_ylim(item[0], item[1])
+    
+    "Set legends"
+    lines, labels = [], []
+    for key, ax in axes.items():
+        line, label = ax.get_legend_handles_labels()
+        lines += line
+        labels += label
+    axes['L1'].legend(lines, labels, loc='best')
     
     if show:
         fig.show()
