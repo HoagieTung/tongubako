@@ -8,7 +8,6 @@ import time
 from functools import lru_cache
 from typing import Union, Literal, List, Dict
 
-import jsonpath as jp
 import numpy as np
 import pandas as pd
 import requests
@@ -27,7 +26,7 @@ def get_child_indicators(category_id: str, freq: str, proxies=None) -> List[Dict
     data_json = r.json()
     return pd.DataFrame(data_json)
 
-test = get_child_indicators('zb','M')
+test = get_child_indicators('A0102','M')
 
 def _get_nbs_wds_tree(idcode: str, dbcode: str, rowcode: str) -> List[Dict]:
     """
@@ -56,6 +55,9 @@ def _get_nbs_wds_tree(idcode: str, dbcode: str, rowcode: str) -> List[Dict]:
 
 def fetch_data(sid, freq='M', period="1990-", proxies=None):
     url = "https://data.stats.gov.cn/english/easyquery.htm"
+    sid = 'A010201'
+    period="1990-"
+    freq='M'
     params = {
         "m": "QueryData",
         "dbcode": db_code[freq],
@@ -64,53 +66,6 @@ def fetch_data(sid, freq='M', period="1990-", proxies=None):
         "wds": "[]",
         "dfwds": '[{"wdcode":"zb","valuecode":"%s"}, '
         '{"wdcode":"sj","valuecode":"%s"}]' % (sid, period),
-        "k1": str(time.time_ns())[:13],
-    }
-    r = requests.get(url, params=params, verify=False, allow_redirects=True)
-    data_json = r.json()
-
-    # 整理为dataframe
-    temp_df = pd.DataFrame(data_json["returndata"]["datanodes"])
-    temp_df["data"] = temp_df["data"].apply(
-        lambda x: x["data"] if x["hasdata"] else None
-    )
-    return
-
-def macro_china_nbs_nation(
-    kind: Literal["M", "Q", "A"], path: str, period: str = "1990-"
-) -> pd.DataFrame:
-    """
-    国家统计局全国数据通用接口
-    https://data.stats.gov.cn/easyquery.htm
-    :param kind: 数据类别
-    :param path: 数据路径
-    :param period: 时间区间，例如'LAST10', '2016-2023', '2016-'等
-    :return: 国家统计局统计数据
-    :rtype: pandas.DataFrame
-    """
-    # 获取dbcode
-    dbcode = kind_code[kind]
-
-    # 获取最终id
-    parent_tree = get_nbs_tree("zb", dbcode)
-    path_split = path.replace(" ", "").split(">")
-    indicator_id = _get_code_from_nbs_tree(parent_tree, path_split[0])
-    path_split.pop(0)
-    while path_split:
-        temp_tree = _get_nbs_tree(indicator_id, dbcode)
-        indicator_id = _get_code_from_nbs_tree(temp_tree, path_split[0])
-        path_split.pop(0)
-
-    # 请求数据
-    url = "https://data.stats.gov.cn/easyquery.htm"
-    params = {
-        "m": "QueryData",
-        "dbcode": dbcode,
-        "rowcode": "zb",
-        "colcode": "sj",
-        "wds": "[]",
-        "dfwds": '[{"wdcode":"zb","valuecode":"%s"}, '
-        '{"wdcode":"sj","valuecode":"%s"}]' % (indicator_id, period),
         "k1": str(time.time_ns())[:13],
     }
     r = requests.get(url, params=params, verify=False, allow_redirects=True)
@@ -139,8 +94,9 @@ def macro_china_nbs_nation(
     )
 
     data_ndarray = np.reshape(temp_df["data"], (len(row_name), len(column_name)))
-    data_df = pd.DataFrame(data=data_ndarray, columns=column_name, index=row_name)
+    data_df = pd.DataFrame(data=data_ndarray, columns=column_name, index=row_name).T
     data_df.index.name = None
     data_df.columns.name = None
 
-    return data_df
+    return
+
