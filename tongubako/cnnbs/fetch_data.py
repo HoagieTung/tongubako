@@ -52,27 +52,28 @@ def _get_nbs_wds_tree(idcode: str, dbcode: str, rowcode: str) -> List[Dict]:
     return data_json
 
 
-def _get_code_from_nbs_tree(category) -> str:
-    """
-    根据指标名称从目录树中获取target编码
-    :param tree: 目录树
-    :param name: 指标名称
-    :param target: 指标编码属性名
-    :return: 指标编码
-    """
-    tree=data_json
-    name='Price Index'
-    target = "id"
-    expr = f'$[?(@.name == "{name}")].{target}'
-    ret = jp.jsonpath(tree, expr)
-    if ret is False:
-        raise ValueError("Please check if the data path or indicator is correct.")
-    return ret[0]
 
 
+def fetch_data(sid, freq='M', period="1990-", proxies=None):
+    url = "https://data.stats.gov.cn/english/easyquery.htm"
+    params = {
+        "m": "QueryData",
+        "dbcode": db_code[freq],
+        "rowcode": "zb",
+        "colcode": "sj",
+        "wds": "[]",
+        "dfwds": '[{"wdcode":"zb","valuecode":"%s"}, '
+        '{"wdcode":"sj","valuecode":"%s"}]' % (sid, period),
+        "k1": str(time.time_ns())[:13],
+    }
+    r = requests.get(url, params=params, verify=False, allow_redirects=True)
+    data_json = r.json()
 
-def get_nbs_category_level2():
-    
+    # 整理为dataframe
+    temp_df = pd.DataFrame(data_json["returndata"]["datanodes"])
+    temp_df["data"] = temp_df["data"].apply(
+        lambda x: x["data"] if x["hasdata"] else None
+    )
     return
 
 def macro_china_nbs_nation(

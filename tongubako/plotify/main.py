@@ -153,6 +153,8 @@ class Constructor():
             raise TypeError("axis_range_mapping must be a dictionary")
         else:
             for key, item in axis_range_mapping.items():
+                if key.upper() not in ['L1','L2','L3','R1','R2','R3']:
+                    raise ValueError('Unrecognized axis')
                 self.axis_range[key] = item
         return
     
@@ -191,6 +193,7 @@ class Constructor():
         return
 
     def make_figure(self, x, y, labels=None, axis=None, axis_title=None, chart_type='line', figsize=(8,5), axis_range=None, axis_shift=50, color=None, order=None, style=None, width=None, *kwargs):
+        self.reset()
         self.chart_type = chart_type
         self.add_data(x, y)
         self.add_labels(labels)
