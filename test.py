@@ -12,6 +12,7 @@ from tongubako.PCA import RPPCA
 from tongubako.data_sample import sp500_close_price, msft_ohlc
 from tongubako import plotify
 from tongubako.alpha_vantage import AlphaVantage
+import matplotlib as plt
 from tongubako.technical_analysis import IchimokuCloud
 from tongubako.technical_analysis import TDSequential
 
@@ -50,9 +51,11 @@ test1 = plotify.line(test)
 from tongubako.dbnomics import DBnomics
 test = DBnomics()
 test1 = test.get_series_data(sid='ISM/pmi', details=True)
-test2 = test.get_series_info(sid='ISM/pmi')
+test2 = test.get_series_info(sid='ISM/pmi') 
 
 
-from tongubako.MacroIQ import MacroIQ
-test = MacroIQ()
-test1 = test.get_series_data(sid='CNM1MS', units='yoy')
+from tongubako.cnnbs import CNNBS
+test = CNNBS()
+test1 = test.get_category_tree(category_id='A01', freq='Q')
+test2 = test.get_category_data(category_id='A0103', freq='Q')
+test3 = test.get_series_data(sid='FSCBSYTD')

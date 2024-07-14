@@ -39,17 +39,21 @@ def process_series_data(raw_data, freq, bound_type):
     data_df.index.name = None
     data_df.columns.name = None
     
-    data_df.index = pd.Series(data_df.index).apply(lambda x: transform_date(x).date())
+    data_df.index = pd.Series(data_df.index).apply(lambda x: transform_date(x, freq=freq))
     data_df = adjust_series_observation_bound(data_df, freq, bound_type)
     
-    return data_df
+    return data_df.sort_index()
 
 
-def transform_date(Date):
-    try:
-        output = dt.datetime.strptime(Date.replace(' ',''), '%b%Y')
-    except:
-        output = dt.datetime.strptime(Date.replace(' ',''), '%B%Y')
+def transform_date(Date, freq='M'):
+    if freq.upper() in ['M','MONTHLY','MONTH']:
+        try:
+            output = dt.datetime.strptime(Date.replace(' ',''), '%b%Y').date()
+        except:
+            output = dt.datetime.strptime(Date.replace(' ',''), '%B%Y').date()
+    elif freq.upper() in ['Q','QUARTER','QUARTERLY']:
+        quarter, year = int(Date.replace(' ','').split('Q')[0]), int(Date.replace(' ','').split('Q')[1])
+        output = dt.date(year=year, month=quarter*3, day=1)
     return output
 
 

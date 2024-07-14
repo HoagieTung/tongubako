@@ -16,17 +16,17 @@ urllib3.disable_warnings(InsecureRequestWarning)
 
 db_code = {"M": "hgyd", "Q": "hgjd", "A": "hgnd"}
 
-def get_child_indicators(category_id: str, freq: str, proxies=None) -> List[Dict]:
+def get_child_indicators(category_id='zb', freq='M', proxies=None) -> List[Dict]:
     url = "https://data.stats.gov.cn/english/easyquery.htm"
     params = {"id": category_id, "dbcode": db_code[freq], "wdcode": "zb", "m": "getTree"}
     r = requests.post(url, params=params, verify=False, allow_redirects=True, proxies=proxies)
     data_json = r.json()
     return pd.DataFrame(data_json)
 
-test = get_child_indicators('A0102','M')
+test = get_child_indicators('A0108','M')
 
 
-def fetch_category_data(category_id, freq='M', period="1995-", proxies=None):
+def fetch_category_data(category_id, freq='M', period="1993-", proxies=None):
     url = "https://data.stats.gov.cn/english/easyquery.htm"
     params = {
         "m": "QueryData",
@@ -43,3 +43,5 @@ def fetch_category_data(category_id, freq='M', period="1995-", proxies=None):
 
     return data_json
 
+
+test1 = fetch_category_data(category_id='A010701', freq='M', period="1995-", proxies=None)
