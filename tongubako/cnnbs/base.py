@@ -20,9 +20,8 @@ class CNNBS():
         self.data_dictionary = self.data_list.set_index('sid').to_dict(orient='index')
         return
     
-    def search_sid(self, text):
-        
-        return
+    def search_sid(self, text):    
+        return self.data_list[self.data_list['name'].str.contains(text)].reset_index(drop=True)
     
     def get_category_tree(self, category_id='zb', freq='M'):
         output = fetch_data.get_child_indicators(category_id=category_id, freq=freq, proxies=self.proxies)
