@@ -179,6 +179,17 @@ def ts_shift(data, freq, shift, regulate_format=True):
 
     return result.sort_index().shift(shift).rename(data.squeeze().name)
 
+
+def adjust_period_bound(dates, freq, bound_type='last'):
+    
+    if bound_type.upper() in ['DEFAULT','ORIGINAL']:
+        pass
+    else:
+        output = pd.Series(dates).apply(lambda x: period_bound(x, freq, bound_type=bound_type))
+    
+    return output
+
+
 if __name__ =="__main__":
     
     dates = pd.date_range(dt.date(2020,1,1), dt.date(2024,5,10), freq='B')
