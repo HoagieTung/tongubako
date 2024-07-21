@@ -7,7 +7,7 @@ Created on Wed Apr 24 20:52:40 2024
  
 import datetime as dt
 import pandas as pd
-from tongubako import htfred
+from tongubako.htfred import FRED
 from tongubako.PCA import RPPCA
 from tongubako.data_sample import sp500_close_price, msft_ohlc
 from tongubako import plotify
@@ -17,10 +17,10 @@ from tongubako.technical_analysis import IchimokuCloud
 from tongubako.technical_analysis import TDSequential
 
 
-fred = htfred.FRED(apikey = "75d754e2105704e2fbb857cfc31db71b")
-
+from tongubako.htfred import FRED
+fred = FRED(apikey = "75d754e2105704e2fbb857cfc31db71b")
 test1 = fred.get_series_info(sid='PPIACO')
-test2 = fred.get_series_data(sid='AMXTNO', freq='m', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(1995,1,1))
+test2 = fred.get_series_data(sid='AMXTNO', freq='m', aggregate='eop', units='yoy', bound_type='last', start_date=dt.date(1995,1,1))
 test3 = fred.get_series_data(sid='AMXTTI', freq='m', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(1995,1,1))
 test4 = fred.get_series_data(sid='PPIACO', freq='m', aggregate='eop', units='pc1', bound_type='last', start_date=dt.date(1995,1,1))
 data = test2.to_frame().join(test3, how='outer').join(test4, how='outer')

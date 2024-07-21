@@ -19,13 +19,38 @@ class FRED():
     def __init__(self, apikey, proxies=None):
         self.apikey = apikey
         self.proxies = proxies
+        self.import_master_data()
         return
+    
+    def import_master_data(self):
+        self.frequencies = pd.read_excel('tongubako//master_data//htfred.xlsx','FREQUENCY')
+        self.units = pd.read_excel('tongubako//master_data//htfred.xlsx','UNITS')
+        self.aggregation = pd.read_excel('tongubako//master_data//htfred.xlsx','AGGREGATION')
+        return
+    
+    def get_fred_freq(self, freq_code):
+        if freq_code is None:
+            return None
+        else:
+            return self.frequencies.set_index('FREQ_CODE').to_dict(orient='index')[freq_code]['FRED_FREQ']
+    
+    def get_fred_units(self, unit_code):
+        if unit_code is None:
+            return None
+        else:
+            return self.units.set_index('UNIT_CODE').to_dict(orient='index')[unit_code]['FRED_UNIT']
+    
+    def get_fred_aggregation(self, aggr_code):
+        if aggr_code is None:
+            return None
+        else:
+            return self.aggregation.set_index('AGGR_CODE').to_dict(orient='index')[aggr_code]['FRED_AGGR']
     
     def get_series_info(self, sid):
         return  fetch_data.get_series_info(sid, self.apikey, file_type='json', proxies=self.proxies)
     
     def get_series_data(self, sid, freq=None, aggregate='eop', units=None, bound_type='last', start_date=None, end_date=None, realtime_start=None, realtime_end=None, details=False):
-        raw_data = fetch_data.get_series_observations(sid=sid, freq=freq , aggregate=aggregate, units=units, apikey=self.apikey, realtime_start=realtime_start, realtime_end=realtime_end, proxies=self.proxies)
+        raw_data = fetch_data.get_series_observations(sid=sid, freq=self.get_fred_freq(freq), aggregate=self.get_fred_aggregation(aggregate), units=self.get_fred_units(units), apikey=self.apikey, realtime_start=realtime_start, realtime_end=realtime_end, proxies=self.proxies)
         series_info = fetch_data.get_series_info(sid=sid, apikey=self.apikey, file_type='json', proxies=self.proxies)
         observations = process_data.process_series_observation(data=raw_data, point_in_time='last', drop_realtime=True).rename(columns={'value':sid+'_'+units if units is not None else sid})
         
