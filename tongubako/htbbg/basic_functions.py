@@ -14,7 +14,7 @@ import math
 import time
 
 
-def BDH(session, service_opened, tickers, fields, start_date, end_date=dt.datetime.now().strftime('%Y%m%d'), field_overrides=None, optional_parameters=None, periods_election='DAILY'):
+def BDH(session, service_opened, tickers, fields, start_date, end_date=dt.datetime.now().strftime('%Y%m%d'), field_overrides=None, optional_parameters=None, period='DAILY'):
     refDataService = service_opened.get("//blp/refdata")
     
     if isinstance(fields, str):
@@ -43,7 +43,7 @@ def BDH(session, service_opened, tickers, fields, start_date, end_date=dt.dateti
         for k,v in optional_parameters.items():
             request.set(k, v)
     
-    request.set("periodicitySelection", periods_election)
+    request.set("periodicitySelection", period)
     request.set("startDate", start_date)
     request.set("endDate", end_date)
 

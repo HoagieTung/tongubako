@@ -19,8 +19,8 @@ class BloombergAPI():
         self.session = admin.initiate_bbg(self.host, self.port)
         self.service_opened = admin.initiate_service(session=self.session, service=["//blp/instruments","//blp/refdata"])
     
-    def BDH(self, tickers, fields, start_date, end_date=dt.datetime.now().strftime('%Y%m%d'), periods_election='DAILY', field_overrides=None, optional_parameters=None):
-        result = basic_functions.BDH(session=self.session, service_opened=self.service_opened, tickers=tickers, fields=fields, start_date=start_date, end_date=end_date, field_overrides=field_overrides, optional_parameters=optional_parameters, periods_election=periods_election)
+    def BDH(self, tickers, fields, start_date, end_date=dt.datetime.now().strftime('%Y%m%d'), period='DAILY', field_overrides=None, optional_parameters=None):
+        result = basic_functions.BDH(session=self.session, service_opened=self.service_opened, tickers=tickers, fields=fields, start_date=start_date, end_date=end_date, field_overrides=field_overrides, optional_parameters=optional_parameters, period=period)
         return result
     
     def BDS(self, ticker, field, field_overrides=None):
@@ -31,8 +31,8 @@ class BloombergAPI():
         result = basic_functions.BDP(session=self.session, service_opened=self.service_opened, ticker=ticker, fields=fields, field_overrides=field_overrides)
         return result
     
-    def BQL(self, tickers, fields, start_date=None, end_date=dt.datetime.now().date(), field_overrides=None, optional_parameters=None, periods_election='DAILY', all_columns='auto', cd=None, field_header=True):
-        result = secondary_functions.BQL(session=self.session, service_opened=self.service_opened, tickers=tickers, fields=fields, start_date=start_date, end_date=end_date, field_overrides=field_overrides, optional_parameters=optional_parameters, periods_election=periods_election, all_columns=all_columns, cd=cd)
+    def BQL(self, tickers, fields, start_date=None, end_date=dt.datetime.now().date(), field_overrides=None, optional_parameters=None, period='DAILY', all_columns='auto', cd=None, field_header=True):
+        result = secondary_functions.BQL(session=self.session, service_opened=self.service_opened, tickers=tickers, fields=fields, start_date=start_date, end_date=end_date, field_overrides=field_overrides, optional_parameters=optional_parameters, period=period, all_columns=all_columns, cd=cd)
         if not field_header:
             result.columns = result.columns.droplevel(1)
         return result

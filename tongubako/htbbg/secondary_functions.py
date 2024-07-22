@@ -26,7 +26,7 @@ def get_index_members(session, service_opened, index, date):
     return temp
 
 
-def BQL(session, service_opened, tickers, fields, start_date=None, end_date=dt.datetime.now().date, field_overrides=None, optional_parameters=None, periods_election='DAILY', all_columns='automatic', cd=None):
+def BQL(session, service_opened, tickers, fields, start_date=None, end_date=dt.datetime.now().date, field_overrides=None, optional_parameters=None, period='DAILY', all_columns='automatic', cd=None):
     if isinstance(tickers, str):
         tickers = [tickers]
     if isinstance(fields, str):
@@ -42,7 +42,7 @@ def BQL(session, service_opened, tickers, fields, start_date=None, end_date=dt.d
         data = []
         for j in range(n):
             subset = tickers[j*50:(j+1)*50]
-            temp = basic_functions.BDH(session, service_opened, subset, fields, start_date, end_date, field_overrides, optional_parameters, periods_election)
+            temp = basic_functions.BDH(session, service_opened, subset, fields, start_date, end_date, field_overrides, optional_parameters, period)
             if isinstance(temp.columns[0], str):
                 temp.columns = pd.MultiIndex.from_tuples([(subset[0], fields[0])])
             elif isinstance(temp.columns[0], tuple):
