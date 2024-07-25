@@ -31,7 +31,7 @@ class IchimokuCloud:
         
         return self.ichimoku_cloud
     
-    def plot(self, start=None, end=None, period=None, figure_size=(16,10)):
+    def plot(self, start=None, end=None, period=None, figure_size=(16,10), legend=False, title=None, title_size=None):
         plt.style.use('seaborn')
         plt.rcParams['figure.figsize'] = figure_size
         fig=plt.figure()
@@ -55,8 +55,13 @@ class IchimokuCloud:
         ax.plot(x, chikou, label='Chikou', color='green')
         ax.fill_between(x, senkouA, senkouB, where=senkouA>=senkouB, color='green', label='Bullish Cloud', alpha=0.2)
         ax.fill_between(x, senkouA, senkouB, where=senkouA<senkouB, color='red', label='Bearish Cloud', alpha=0.2)
-        ax.legend()
-
+        
+        if legend:
+            ax.legend()
+        
+        if title is not None:
+            plt.title(title, fontsize=title_size)
+        
         plt.show()
         return fig
     
