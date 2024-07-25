@@ -72,7 +72,6 @@ def line(constructor, show=False, **kwargs):
         labels += label
     axes['L1'].legend(lines, labels, loc='best')
     
-    if show:
-        fig.show()
+    plt.show()
 
     return fig

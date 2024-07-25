@@ -25,8 +25,9 @@ def bema_filter(data, halflife=None, alpha=None):
 
 start_date = dt.date(1995,1,1)
 
+new_houses_sold = fred.get_series_data(sid='HTRUCKSSAAR', units='yoy', start_date=start_date).rename('New Home Sales YoY')
 new_order_ex_trans = fred.get_series_data(sid='AMXTNO', units='pc1', start_date=start_date)
-inventory_ex_trans = fred.get_series_data(sid='AMXTTI', units='pc1', start_date=start_date)
+inventory_ex_trans = fred.get_series_data(sid='AMXTTI', units='pc1', start_date=start_date).rename('Inventory Ex Trans YoY')
 ppi = fred.get_series_data(sid='PPIACO', units='pc1', start_date=start_date)
 industrial_production = fred.get_series_data(sid='INDPRO', units='pc1', start_date=start_date)
 durable_goods_sales = fred.get_series_data(sid='S423SMM144SCEN', units='pc1', start_date=start_date)
@@ -36,9 +37,9 @@ manufacture_demand = (new_order_ex_trans - inventory_ex_trans).rename('Manufactu
 durable_goods_demand = (durable_goods_sales - durable_goods_inventories).rename('Durable Goods Demand YoY')
 produciton = (ppi + industrial_production).rename('Nominal Industrial Production YoY')
 
-original_data = manufacture_demand.to_frame().join(produciton, how='outer').join(inventory_ex_trans, how='outer')
+original_data = manufacture_demand.to_frame().join(produciton, how='outer').join(inventory_ex_trans, how='outer').join(new_houses_sold, how='outer')
 
-data = original_data.apply(lambda x: bema_filter(x, alpha=0.25)).dropna()
+data = original_data[['New Home Sales YoY','Nominal Industrial Production YoY','Inventory Ex Trans YoY']].apply(lambda x: bema_filter(x, alpha=0.5)).dropna()
 
 cycle, trend = cffilter(data, 48-12, 48+12*2)
 
