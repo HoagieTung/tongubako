@@ -149,6 +149,13 @@ def calculate_change(data, how, freq):
             raise TypeError('Month-over-month is not compatible with quarterly frequency')
         elif freq.upper() in WEEK_FREQ:
             output = data.diff(4) / data.shift(4) * 100
+    elif how.upper() in ['YTD-Percentage','YTD P','YTD-P','YTD-PCT']:
+        if freq.upper() in MONTH_FREQ:
+            pass
+        elif freq.upper() in QUARTER_FREQ:
+            pass
+        else:
+            raise TypeError('Year-to-date is only compatible with monthly and quarterly frequency')
     elif how.upper() in ['POP-PERCENTAGE','POP P','POP-P','POP-PCT']:
         output = data.diff(1) / data.shift(1) * 100
     elif how.upper() in ['POP-CHANGE','POP C','POP-C','POP-CHG']:
